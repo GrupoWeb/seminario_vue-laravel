@@ -42,7 +42,7 @@ class GetSidebarMenu implements MenuInterface{
 
     // roles prueba 2
 
-    public function getPruebaMenu($menuName){
+    public function getPruebaMenu($menuName){            
         $this->getMenuFromDB($menuName, 'empresa1');
     }
 
