@@ -8,6 +8,7 @@ use Faker\Factory as Faker;
 use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use App\Models\userHasRoles;
 use App\Models\RoleHierarchy;
 
 class UsersAndNotesSeeder extends Seeder
@@ -84,19 +85,45 @@ class UsersAndNotesSeeder extends Seeder
             'menuroles' => 'user,admin',
             'status' => 'Active'
         ]);
+
         $user->assignRole('user');
         $user->assignRole($roleAdmin);
+        userHasRoles::create([
+            'role_id'   =>  $adminRole->id,
+            'users_id'  =>  $user->id
+        ]);
+        userHasRoles::create([
+            'role_id'   =>  $userRole->id,
+            'users_id'  =>  $user->id
+        ]);
 
-        $user = User::create([ 
+
+
+
+
+        $user2 = User::create([ 
             'name' => 'jjolon',
             'email' => 'jjolon@miumg.edu.gt',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'menuroles' => 'empresa1',
+            'menuroles' => 'admin,empresa1',
             'status' => 'Active'
         ]);
-        $user->assignRole($roleEmpresa);
+        $user2->assignRole('user');
+        $user2->assignRole($roleAdmin);
+        userHasRoles::create([
+            'role_id'   =>  $adminRole->id,
+            'users_id'  =>  $user2->id
+        ]);
+        userHasRoles::create([
+            'role_id'   =>  $userRole->id,
+            'users_id'  =>  $user2->id
+        ]);
+
+
+
+
         // for($i = 0; $i<$numberOfUsers; $i++){
         //     $user = User::create([
         //         'name' => $faker->name(),
