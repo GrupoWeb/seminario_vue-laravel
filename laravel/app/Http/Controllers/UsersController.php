@@ -28,7 +28,7 @@ class UsersController extends Controller
     {
         $you = auth()->user()->id;
         $users = DB::table('users')
-        ->select('users.id', 'users.name', 'users.email', 'users.menuroles as roles', 'users.status', 'users.email_verified_at as registered')
+        ->select('users.id', 'users.name as nombre', 'users.email', 'users.menuroles as roles', 'users.status as estado', 'users.email_verified_at as registro')
         ->whereNull('deleted_at')
         ->get();
         return response()->json( compact('users', 'you') );

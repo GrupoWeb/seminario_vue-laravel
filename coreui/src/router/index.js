@@ -747,25 +747,25 @@ function configRoutes () {
               path: 'coreui-icons',
               name: 'Icons library',
               component: CoreUIIcons,
-              meta:{
-                requiresUser: true
-              }
+              // meta:{
+              //   requiresUser: true
+              // }
             },
             {
               path: 'brands',
               name: 'Brands',
               component: Brands,
-              meta:{
-                requiresUser: true
-              }
+              // meta:{
+              //   requiresUser: true
+              // }
             },
             {
               path: 'flags',
               name: 'Flags',
               component: Flags,
-              meta:{
-                requiresUser: true
-              }
+              // meta:{
+              //   requiresUser: true
+              // }
             }
           ]
         },

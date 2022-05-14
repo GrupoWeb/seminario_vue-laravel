@@ -123,13 +123,11 @@ export default {
     })
     let self = this;
 
-    console.log(this.$apiAdress);
 
     axios.get( this.$apiAdress + '/api/menu?token=' + localStorage.getItem("api_token") )
     .then(function (response) {
       self.nav = self.rebuildData(response.data);
     }).catch(function (error) {
-      console.log(error);
       self.$router.push({ path: '/login' });
     });
   }

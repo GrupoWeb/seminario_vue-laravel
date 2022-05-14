@@ -1,10 +1,10 @@
 <template>
   <CRow>
-    <CCol col="12" xl="8">
+    <CCol col="12" xl="12">
       <transition name="slide">
       <CCard>
         <CCardHeader>
-            Users
+            Usuarios
         </CCardHeader>
         <CCardBody>
           <CAlert
@@ -14,6 +14,7 @@
           >
             ({{dismissCountDown}}) {{ message }}
           </CAlert>
+          <CButton color="primary" @click="addUser()"  class="mb-3">Crear Usuario</CButton>
           <CDataTable
             hover
             striped
@@ -22,24 +23,24 @@
             :items-per-page="5"
             pagination
           >
-          <template #status="{item}">
+          <template #estado="{item}">
             <td>
-              <CBadge :color="getBadge(item.status)">{{ item.status }}</CBadge>
+              <CBadge :color="getBadge(item.estado)">{{ item.estado }}</CBadge>
             </td>
           </template>
-          <template #show="{item}">
+          <template #ver="{item}">
             <td>
-              <CButton color="primary" @click="showUser( item.id )">Show</CButton>
+              <CButton color="primary" @click="showUser( item.id )">Ver</CButton>
             </td>
           </template>
-          <template #edit="{item}">
+          <template #editar="{item}">
             <td>
-              <CButton color="primary" @click="editUser( item.id )">Edit</CButton>
+              <CButton color="primary" @click="editUser( item.id )">Editar</CButton>
             </td>
           </template>
-          <template #delete="{item}">
+          <template #eliminar="{item}">
             <td>
-              <CButton v-if="you!=item.id" color="danger" @click="deleteUser( item.id )">Delete</CButton>
+              <CButton v-if="you!=item.id" color="danger" @click="deleteUser( item.id )">Eliminar</CButton>
             </td>
           </template>
         </CDataTable>
@@ -58,7 +59,7 @@ export default {
   data: () => {
     return {
       items: [],
-      fields: ['id', 'name', 'registered', 'roles', 'status', 'show', 'edit', 'delete'],
+      fields: ['id', 'nombre', 'registro', 'roles', 'estado', 'ver', 'editar', 'eliminar'],
       currentPage: 1,
       perPage: 5,
       totalRows: 0,
@@ -77,11 +78,14 @@ export default {
     nextButtonHtml: 'next'
   },
   methods: {
-    getBadge (status) {
-      return status === 'Active' ? 'success'
-        : status === 'Inactive' ? 'secondary'
-          : status === 'Pending' ? 'warning'
-            : status === 'Banned' ? 'danger' : 'primary'
+    getBadge (estado) {
+      return estado === 'Active' ? 'success'
+        : estado === 'Inactive' ? 'secondary'
+          : estado === 'Pending' ? 'warning'
+            : estado === 'Banned' ? 'danger' : 'primary'
+    },
+    addUser(){
+      this.$router.push({path: `menuelement/${id.toString()}/menuelement`});
     },
     userLink (id) {
       return `users/${id.toString()}`

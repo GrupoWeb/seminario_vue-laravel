@@ -15,7 +15,7 @@
         </div>
       </CHeaderNavLink>
     </template>
-    <CDropdownHeader tag="div" class="text-center" color="light">
+    <!-- <CDropdownHeader tag="div" class="text-center" color="light">
       <strong>Account</strong>
     </CDropdownHeader>
     <CDropdownItem>
@@ -33,8 +33,8 @@
     <CDropdownItem>
       <CIcon name="cil-comment-square" /> Comments
       <CBadge color="warning" class="ml-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
-    <CDropdownHeader
+    </CDropdownItem> -->
+    <!-- <CDropdownHeader
       tag="div"
       class="text-center"
       color="light"
@@ -54,13 +54,13 @@
     <CDropdownItem>
       <CIcon name="cil-file" /> Projects
       <CBadge color="primary" class="ml-auto">{{ itemsCount }}</CBadge>
-    </CDropdownItem>
+    </CDropdownItem> -->
     <CDropdownDivider/>
-    <CDropdownItem>
+    <!-- <CDropdownItem>
       <CIcon name="cil-shield-alt" /> Lock Account
-    </CDropdownItem>
+    </CDropdownItem> -->
     <CDropdownItem @click="logout()">
-      <CIcon name="cil-lock-locked" /> Logout
+      <CIcon name="cil-lock-locked" /> Salir
     </CDropdownItem>
   </CDropdown>
 </template>

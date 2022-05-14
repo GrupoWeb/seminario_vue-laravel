@@ -47,18 +47,22 @@ class UsersAndNotesSeeder extends Seeder
             'hierarchy' => 3,
         ]);
 
-        $empresaRole = $roleEmpresa = Role::create(['name' => 'empresa1']); 
+        $empresaRole = $roleEmpresa = Role::create(['name' => 'facturador']); 
         RoleHierarchy::create([
             'role_id' => $empresaRole->id,
             'hierarchy' => 4,
         ]);
 
-        // $faker = Faker::create();
+
+
+
         /*  insert status  */
         DB::table('status')->insert([
             'name' => 'ongoing',
             'class' => 'primary',
         ]);
+
+
         array_push($statusIds, DB::getPdo()->lastInsertId());
         DB::table('status')->insert([
             'name' => 'stopped',
@@ -75,6 +79,10 @@ class UsersAndNotesSeeder extends Seeder
             'class' => 'warning',
         ]);
         array_push($statusIds, DB::getPdo()->lastInsertId());
+
+
+
+
         /*  insert users   */
         $user = User::create([ 
             'name' => 'admin',
@@ -120,37 +128,5 @@ class UsersAndNotesSeeder extends Seeder
             'role_id'   =>  $userRole->id,
             'users_id'  =>  $user2->id
         ]);
-
-
-
-
-        // for($i = 0; $i<$numberOfUsers; $i++){
-        //     $user = User::create([
-        //         'name' => $faker->name(),
-        //         'email' => $faker->unique()->safeEmail(),
-        //         'email_verified_at' => now(),
-        //         'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        //         'remember_token' => Str::random(10),
-        //         'menuroles' => 'user',
-        //         'status' => $userStatus[ random_int(0,count($userStatus) - 1) ]
-        //     ]);
-        //     $user->assignRole('user');
-        //     array_push($usersIds, $user->id);
-        // }
-        /*  insert notes  */
-        // for($i = 0; $i<$numberOfNotes; $i++){
-        //     $noteType = $faker->word();
-        //     if(random_int(0,1)){
-        //         $noteType .= ' ' . $faker->word();
-        //     }
-        //     DB::table('notes')->insert([
-        //         'title'         => $faker->sentence(4,true),
-        //         'content'       => $faker->paragraph(3,true),
-        //         'status_id'     => $statusIds[random_int(0,count($statusIds) - 1)],
-        //         'note_type'     => $noteType,
-        //         'applies_to_date' => $faker->date(),
-        //         'users_id'      => $usersIds[random_int(0,$numberOfUsers-1)]
-        //     ]);
-        // }
     }
 }
