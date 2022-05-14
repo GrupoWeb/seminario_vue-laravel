@@ -20,16 +20,8 @@ class UsersAndNotesSeeder extends Seeder
      */
     public function run()
     {
-        $numberOfUsers = 10;
-        $numberOfNotes = 100;
-        $usersIds = array();
         $statusIds = array();
-        $userStatus = array(
-            'Active',
-            'Inactive',
-            'Pending',
-            'Banned'
-        );
+
         /* Create roles */
         $adminRole = $roleAdmin = Role::create(['name' => 'admin']);
         RoleHierarchy::create([
@@ -58,28 +50,16 @@ class UsersAndNotesSeeder extends Seeder
 
         /*  insert status  */
         DB::table('status')->insert([
-            'name' => 'ongoing',
+            'name' => 'Activo',
             'class' => 'primary',
         ]);
 
 
         array_push($statusIds, DB::getPdo()->lastInsertId());
         DB::table('status')->insert([
-            'name' => 'stopped',
+            'name' => 'Inactivop',
             'class' => 'secondary',
         ]);
-        array_push($statusIds, DB::getPdo()->lastInsertId());
-        DB::table('status')->insert([
-            'name' => 'completed',
-            'class' => 'success',
-        ]);
-        array_push($statusIds, DB::getPdo()->lastInsertId());
-        DB::table('status')->insert([
-            'name' => 'expired',
-            'class' => 'warning',
-        ]);
-        array_push($statusIds, DB::getPdo()->lastInsertId());
-
 
 
 
@@ -90,8 +70,7 @@ class UsersAndNotesSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'menuroles' => 'user,admin',
-            'status' => 'Active'
+            'status_id' => 1
         ]);
 
         $user->assignRole('user');
@@ -115,8 +94,7 @@ class UsersAndNotesSeeder extends Seeder
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'remember_token' => Str::random(10),
-            'menuroles' => 'admin,empresa1',
-            'status' => 'Active'
+            'status_id' => 1
         ]);
         $user2->assignRole('user');
         $user2->assignRole($roleAdmin);

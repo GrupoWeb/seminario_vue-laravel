@@ -1,6 +1,6 @@
 <template>
   <CRow>
-    <CCol col="12" lg="6">
+    <CCol col="12" lg="10">
       <CCard>
         <CCardHeader>
           User id:  {{ $route.params.id }}
@@ -9,7 +9,7 @@
           <CDataTable 
             striped 
             small 
-            fixed
+            
             :items="items" 
             :fields="fields"
           >

@@ -28,7 +28,8 @@ class UsersController extends Controller
     {
         $you = auth()->user()->id;
         $users = DB::table('users')
-        ->select('users.id', 'users.name as nombre', 'users.email', 'users.menuroles as roles', 'users.status as estado', 'users.email_verified_at as registro')
+        ->select('users.id', 'users.name as nombre', 'users.email',  'status.name as estado', 'users.email_verified_at as registro')
+        ->join('status','status.id','=','users.status_id')
         ->whereNull('deleted_at')
         ->get();
         return response()->json( compact('users', 'you') );
@@ -43,7 +44,8 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = DB::table('users')
-        ->select('users.id', 'users.name', 'users.email', 'users.menuroles as roles', 'users.status', 'users.email_verified_at as registered')
+        ->select('users.id', 'users.name', 'users.email',  'status.name as estado', 'users.email_verified_at as registered')
+        ->join('status','status.id','=','users.status_id')
         ->where('users.id', '=', $id)
         ->first();
         return response()->json( $user );
@@ -58,7 +60,7 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user = DB::table('users')
-        ->select('users.id', 'users.name', 'users.email', 'users.menuroles as roles', 'users.status')
+        ->select('users.id', 'users.name', 'users.email',  'users.status_id')
         ->where('users.id', '=', $id)
         ->first();
         return response()->json( $user );

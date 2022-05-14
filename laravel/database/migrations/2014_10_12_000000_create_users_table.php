@@ -23,11 +23,12 @@ class CreateUsersTable extends Migration
             ->unique()
             ->nullable()
             ->default(null);
-            $table->string('menuroles');
-            $table->string('status')->nullable();
+            $table->bigInteger('status_id')->unsigned();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('status_id')->references('id')->on('status');
         });
     }
 

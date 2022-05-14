@@ -15,6 +15,60 @@
             ({{dismissCountDown}}) {{ message }}
           </CAlert>
           <CButton color="primary" @click="addUser()"  class="mb-3">Crear Usuario</CButton>
+          <CModal
+            :title="propsModal.title"
+            :show.sync="visibleStaticBackdropDemo"
+            :color="propsModal.color"
+            :size="propsModal.size"
+            :closeOnBackdrop="propsModal.BackDrop"
+          >
+            <CForm novalidate>
+              <CSelect
+                :value.sync ="form.role"
+                label="Roles de Usuario"
+                :options="propsModal.options"
+                placeholder="Seleccione ..."
+                valid-feedback="Correcto.."
+                invalid-feedback="Seleccione"
+                required
+                was-validated
+              />
+              <CInput
+                v-model="form.name"
+                label="Nombre"
+                type="input"
+                valid-feedback="Correcto.."
+                invalid-feedback="Ingrese nombre de usuario"
+                required
+                was-validated
+              />
+              <CInput
+                v-model="form.email"
+                label="Correo Electrónico"
+                type="email"
+                valid-feedback="Correcto.."
+                invalid-feedback="Ingrese un correo valido"
+                required
+                was-validated
+              />
+              <CInput
+                v-model="form.password"
+                label="Contraseña"
+                type="password"
+                autocomplete="current-password"
+                valid-feedback="Correcto.."
+                invalid-feedback="Ingrese una contraseña"
+                :is-valid="validator"
+                required
+                was-validated
+              />
+            </CForm>
+            <template #footer>
+              <CButton @click="close" color="danger">Cancelar</CButton>
+              <CButton @click="submit" color="success">Guardar</CButton>
+            </template>
+          </CModal>
+
           <CDataTable
             hover
             striped
@@ -59,7 +113,7 @@ export default {
   data: () => {
     return {
       items: [],
-      fields: ['id', 'nombre', 'registro', 'roles', 'estado', 'ver', 'editar', 'eliminar'],
+      fields: ['id', 'nombre', 'email', 'estado', 'ver', 'editar', 'eliminar'],
       currentPage: 1,
       perPage: 5,
       totalRows: 0,
@@ -68,7 +122,21 @@ export default {
       showMessage: false,
       dismissSecs: 7,
       dismissCountDown: 0,
-      showDismissibleAlert: false
+      showDismissibleAlert: false,
+      visibleStaticBackdropDemo: false,
+      propsModal: {
+        title: "Agregar Nuevo Usuario",
+        color: "dark",
+        size: "lg",
+        BackDrop: false,
+        options: []
+      },
+      form: {
+        role:"",
+        name: "",
+        email: "",
+        password:""
+      }
     }
   },
   paginationProps: {
@@ -78,14 +146,24 @@ export default {
     nextButtonHtml: 'next'
   },
   methods: {
+    validator (val) {
+      return val ? val.length >= 8 : false
+    },
     getBadge (estado) {
-      return estado === 'Active' ? 'success'
-        : estado === 'Inactive' ? 'secondary'
+      return estado === 'Activo' ? 'success'
+        : estado === 'Inactivo' ? 'secondary'
           : estado === 'Pending' ? 'warning'
             : estado === 'Banned' ? 'danger' : 'primary'
     },
     addUser(){
-      this.$router.push({path: `menuelement/${id.toString()}/menuelement`});
+      this.visibleStaticBackdropDemo = !this.visibleStaticBackdropDemo
+      // this.$router.push({path: `menuelement/${id.toString()}/menuelement`});
+    },
+    close(){
+      this.visibleStaticBackdropDemo = !this.visibleStaticBackdropDemo
+    },
+    submit(){
+      console.log(this.form)
     },
     userLink (id) {
       return `users/${id.toString()}`
@@ -132,10 +210,22 @@ export default {
         console.log(error);
         self.$router.push({ path: '/login' });
       });
+    },
+    getRoles(){
+      let self = this;
+      axios.get(  this.$apiAdress + '/api/getRoles?token=' + localStorage.getItem("api_token"))
+      .then(function (response) {
+        self.propsModal.options = response.data
+      }).catch(function (error) {
+        console.log(error);
+        self.$router.push({ path: '/login' });
+      });
+
     }
   },
   mounted: function(){
     this.getUsers();
+    this.getRoles();
   }
 }
 </script>

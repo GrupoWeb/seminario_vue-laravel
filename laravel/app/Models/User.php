@@ -43,7 +43,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'status'
+        'name', 'email', 'password', 'status_id'
     ];
 
     /**
@@ -70,7 +70,7 @@ class User extends Authenticatable implements JWTSubject
     
     protected $guard_name = 'api';
 
-    protected $attributes = [ 
-        'menuroles' => 'user',
-    ];
+    // protected $attributes = [ 
+    //     'menuroles' => 'user',
+    // ];
 }

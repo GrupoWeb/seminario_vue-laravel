@@ -12,10 +12,10 @@ class Users extends Model
     /**
      * Get the notes for the users.
      */
-    public function notes()
-    {
-        return $this->hasMany('App\Notes');
-    }
+    // public function notes()
+    // {
+    //     return $this->hasMany('App\Notes');
+    // }
 
     protected $dates = [
         'deleted_at'

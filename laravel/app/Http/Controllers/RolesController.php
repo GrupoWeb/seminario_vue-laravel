@@ -36,6 +36,12 @@ class RolesController extends Controller
         return response()->json( $roles );
     }
 
+    public function getRoles(){
+        $roles = DB::table('roles')->select('id as value','name as label')->get();
+
+        return response()->json( $roles );
+    }
+
     public function moveUp(Request $request){
         $element = RoleHierarchy::where('role_id', '=', $request->input('id'))->first();
         $switchElement = RoleHierarchy::where('hierarchy', '<', $element->hierarchy)

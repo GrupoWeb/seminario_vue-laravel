@@ -21,7 +21,8 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('refresh', 'AuthController@refresh');
     Route::post('register', 'AuthController@register'); 
 
-    Route::resource('notes', 'NotesController');
+    Route::get('getRoles','RolesController@getRoles');
+
 
     Route::resource('resource/{table}/resource', 'ResourceController');
     

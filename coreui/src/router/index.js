@@ -575,9 +575,6 @@ function configRoutes () {
               path: 'forms',
               name: 'Forms',
               component: Forms,
-              meta:{
-                requiresUser: true
-              }
             },
             {
               path: 'switches',
