@@ -41,7 +41,7 @@ export default {
       nav: [],
       //show: true,
       buffor: [],
-      logo: '/transport/logo_transparente.png'
+      logo: '/transport/logo_uno.jpg'
     }
   },
   computed: {
