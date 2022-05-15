@@ -6,8 +6,8 @@
           <CCard class="p-4">
             <CCardBody>
               <CForm @submit.prevent="login" method="POST">
-                <h1>Login</h1>
-                <p class="text-muted">Sign In to your account</p>
+                <h1>Sistema</h1>
+                <p class="text-muted">Iniciar sesión en su cuenta</p>
                 <CInput
                   v-model="email"
                   prependHtml="<i class='cui-user'></i>"
@@ -26,17 +26,17 @@
                   <template #prepend-content><CIcon name="cil-lock-locked"/></template>
                 </CInput>
                 <CRow>
-                  <CCol col="6">
-                    <CButton type="submit" color="primary" class="px-4">Login</CButton>
-                  </CCol>
-                  <CCol col="6" class="text-right">
+                  <!-- <CCol col="8"> -->
+                    <CButton type="submit" color="primary" class="px-4">Entrar</CButton>
+                  <!-- </CCol> -->
+                  <!-- <CCol col="6" class="text-right">
                     <CButton color="link" class="px-0">Forgot password?</CButton>
-                  </CCol>
+                  </CCol> -->
                 </CRow>
               </CForm>
             </CCardBody>
           </CCard>
-          <CCard
+          <!-- <CCard
             color="primary"
             text-color="white"
             class="text-center py-5 d-md-down-none"
@@ -51,7 +51,7 @@
             >
               Register Now!
             </CButton>
-          </CCard>
+          </CCard> -->
         </CCardGroup>
       </CCol>
     </CRow>
@@ -70,6 +70,7 @@ import axios from "axios";
           password: '',
           showMessage: false,
           message: '',
+          
         }
       },
       methods: {
