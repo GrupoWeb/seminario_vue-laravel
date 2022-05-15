@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\userHasRoles;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Response;
 
 class UsersController extends Controller
 {
@@ -97,8 +101,40 @@ class UsersController extends Controller
     {
         $user = User::find($id);
         if($user){
+            $user->update(['status_id'   => 2]);
             $user->delete();
         }
         return response()->json( ['status' => 'success'] );
+    }
+
+    public function createUser(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $user = User::create([
+                'name'              =>  $request->name,
+                'email'             =>  $request->email,
+                'password'          =>  Hash::make($request->password),
+                'status_id'         =>  1
+            ]);
+
+            $roleName = DB::table('roles')->select('name')->where(['id'   =>  $request->role_id])->first();
+
+
+            $user->assignRole($roleName->name);
+
+            userHasRoles::create([
+                'role_id'   =>  $request->role_id,
+                'users_id'  =>  $user->id
+            ]);
+
+            DB::commit();
+
+            return response()->json($user,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return response()->json(['error' => 'usuario no creado ' . $th], Response::HTTP_BAD_REQUEST);
+        }
     }
 }

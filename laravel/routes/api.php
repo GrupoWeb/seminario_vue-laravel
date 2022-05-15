@@ -21,12 +21,15 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('refresh', 'AuthController@refresh');
     Route::post('register', 'AuthController@register'); 
 
+
     Route::get('getRoles','RolesController@getRoles');
+    Route::post('createUser','UsersController@createUser');
 
 
     Route::resource('resource/{table}/resource', 'ResourceController');
     
     Route::group(['middleware' => 'admin'], function ($router) {
+        Route::resource('users', 'UsersController')->except( ['create', 'store'] );
 
         Route::resource('mail',        'MailController');
         Route::get('prepareSend/{id}', 'MailController@prepareSend')->name('prepareSend');
@@ -34,7 +37,6 @@ Route::group(['middleware' => 'api'], function ($router) {
 
         Route::resource('bread',  'BreadController');   //create BREAD (resource)
 
-        Route::resource('users', 'UsersController')->except( ['create', 'store'] );
 
         Route::prefix('menu/menu')->group(function () { 
             Route::get('/',         'MenuEditController@index')->name('menu.menu.index');

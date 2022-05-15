@@ -22,7 +22,7 @@
             :size="propsModal.size"
             :closeOnBackdrop="propsModal.BackDrop"
           >
-            <CForm novalidate>
+            <CForm novalidate class="row g-3 needs-validation" ref="form">
               <CSelect
                 :value.sync ="form.role"
                 label="Roles de Usuario"
@@ -107,6 +107,7 @@
 
 <script>
 import axios from 'axios'
+import { router } from '../../utils/router'
 
 export default {
   name: 'Users',
@@ -163,7 +164,36 @@ export default {
       this.visibleStaticBackdropDemo = !this.visibleStaticBackdropDemo
     },
     submit(){
-      console.log(this.form)
+      // createUser
+      if(this.$refs.form.checkValidity()){
+        axios.post(router[0].createUser + '?token=' + localStorage.getItem("api_token"),{
+          name: this.form.name,
+          email: this.form.email,
+          password: this.form.password,
+          role_id: this.form.role
+        }).then(response => {
+          if(response.status == 200){
+            this.$swal({
+              icon: "success",
+              title: "Usuario Creado",
+              showConfirmButton: false,
+              timer: 2500,
+            });
+
+            this.clearForm()
+            this.close()
+            this.getUsers()
+          }
+        }).catch(error => {
+          console.log(error)
+        })
+      }
+    },
+    clearForm(){
+      this.form.role = ""
+      this.form.name = ""
+      this.form.email = "",
+      this.form.password = ""
     },
     userLink (id) {
       return `users/${id.toString()}`
@@ -186,7 +216,7 @@ export default {
         _method: 'DELETE'
       })
       .then(function (response) {
-          self.message = 'Successfully deleted user.';
+          self.message = 'Usuario Eliminado!';
           self.showAlert();
           self.getUsers();
       }).catch(function (error) {
