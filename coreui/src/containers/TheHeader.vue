@@ -11,7 +11,8 @@
       @click="$store.commit('toggleSidebarDesktop')"
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
-      <CIcon name="logo" height="48" alt="Logo"/>
+      <CImg :src=logo   class="mb-2"  height="58"  with="300" />
+      <!-- <CIcon name="logo" height="48" alt="Logo"/> -->
     </CHeaderBrand>
 
     <CMenu/>
@@ -49,6 +50,11 @@ export default {
   components: {
     TheHeaderDropdownAccnt,
     CMenu
+  },
+  data() {
+    return {
+      logo: '/transport/logo_uno.jpg'
+    }
   }
 }
 </script>

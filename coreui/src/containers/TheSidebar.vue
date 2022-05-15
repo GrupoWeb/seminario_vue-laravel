@@ -6,13 +6,21 @@
     @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
   >
     <CSidebarBrand class="d-md-down-none" to="/">
-      <CIcon 
+      <CImg
+        :fluidGrow="true"
+        :src=logo
+        block
+        class="mb-2"
+        height="35"
+        with="300"
+      />
+      <!-- <CIcon 
         class="d-block" 
-        name="logo" 
+        name="logos" 
         size="custom-size" 
         :height="35" 
         :viewBox="`0 0 ${minimize ? 110 : 556} 134`"
-      />
+      /> -->
     </CSidebarBrand>
     <CRenderFunction flat :content-to-render="nav"/>
     <CSidebarMinimizer
@@ -24,6 +32,7 @@
 
 <script>
 import axios from 'axios'
+
 export default {
   name: 'TheSidebar',
   data () {
@@ -32,6 +41,7 @@ export default {
       nav: [],
       //show: true,
       buffor: [],
+      logo: '/transport/logo_transparente.png'
     }
   },
   computed: {
