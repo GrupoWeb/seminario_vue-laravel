@@ -140,7 +140,6 @@ import { router } from '../../../utils/router'
              this.$bvModal.show("deleteModal");
          },
         close() {
-            this.close()
             this.idModal = !this.idModal
         },
          handleOk(id){
