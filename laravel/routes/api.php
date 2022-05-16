@@ -22,9 +22,21 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('register', 'AuthController@register'); 
 
 
+    // router custom
     Route::get('getRoles','RolesController@getRoles');
     Route::post('createUser','UsersController@createUser');
 
+    Route::get('departamentos','CustomController@getDepartamentos');
+    Route::post('departamentoById','CustomController@getDepartamentosById');
+    Route::post('updateDepartamenoById','CustomController@updateDepartament');
+    Route::post('deleteDepartament','CustomController@deleteDepartament');
+
+    Route::get('municipios','CustomController@getMunicipios');
+    Route::post('municipioById','CustomController@getMunicipiosById');
+    Route::post('updateMunicipioById','CustomController@updateMunicipio');
+    Route::post('deleteMunicipio','CustomController@deleteMunicipio');
+
+    /*********************************** */
 
     Route::resource('resource/{table}/resource', 'ResourceController');
     

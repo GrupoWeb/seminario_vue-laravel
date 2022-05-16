@@ -105,6 +105,12 @@ const DeleteMenuElement = () => import('@/views/menuElements/DeleteMenuElement')
 const Media = () => import('@/views/media/Media')
 
 
+// modulos adicionales
+
+const Departamento = () => import('@/views/modulos/departamento/departamentos');
+const Municipio = () => import('@/views/modulos/municipio/municipios');
+
+
 Vue.use(Router)
 
 let router = new Router({
@@ -292,6 +298,33 @@ function configRoutes () {
                 requiresAdmin: true
               }
             },
+          ]
+        },
+        // modulos customs
+        {
+          path: 'departamento',
+          meta: { label: 'departamento' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Departamento,
+            }
+          ]
+        },
+        {
+          path: 'municipio',
+          meta: { label: 'municipio' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Municipio,
+            }
           ]
         },
         {

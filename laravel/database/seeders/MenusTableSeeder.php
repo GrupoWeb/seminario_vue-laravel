@@ -145,6 +145,8 @@ class MenusTableSeeder extends Seeder
             $this->insertLink('admin', 'Roles','/roles');
             // $this->insertLink('admin', 'BREAD',    '/bread');
             $this->insertLink('admin', 'Correo Electrónico',    '/email');
+            $this->insertLink('admin', 'Departamentos',    '/departamento');
+            $this->insertLink('admin', 'Municipios',    '/municipio');
         $this->endDropdown();
         $this->joinAllByTransaction(); ///   <===== Must by use on end of this seeder
     }
