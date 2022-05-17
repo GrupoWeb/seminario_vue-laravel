@@ -22,6 +22,63 @@ class UsersAndNotesSeeder extends Seeder
     {
         $statusIds = array();
 
+        $data = [
+            [
+                'name' => 'Usuario Extracción'
+            ],
+            [
+                'name' => 'Admin Extracción'
+            ],
+            [
+                'name' => 'Facturador Extracción'
+            ],
+            [
+                'name' => 'Usuario Planta'
+            ],
+            [
+                'name' => 'Admin Planta'
+            ],
+            [
+                'name' => 'Facturador Planta'
+            ],
+            [
+                'name' => 'Usuario Alquiler'
+            ],
+            [
+                'name' => 'Admin Alquiler'
+            ],
+            [
+                'name' => 'Facturador Alquiler'
+            ],
+            [
+                'name' => 'Usuario Cemex'
+            ],
+            [
+                'name' => 'Admin Cemex'
+            ],
+            [
+                'name' => 'Facturador Cemex'
+            ],
+            [
+                'name' => 'Usuario Transport'
+            ],
+            [
+                'name' => 'Admin Transport'
+            ],
+            [
+                'name' => 'Facturador Transport'
+            ],
+            [
+                'name' => 'Usuario Constructora'
+            ],
+            [
+                'name' => 'Admin Constructora'
+            ],
+            [
+                'name' => 'Facturador Constructora'
+            ],
+        ];
+
         /* Create roles */
         $adminRole = $roleAdmin = Role::create(['name' => 'admin']);
         RoleHierarchy::create([
@@ -46,6 +103,14 @@ class UsersAndNotesSeeder extends Seeder
         ]);
 
 
+        foreach ($data as $key =>  $rolValue) {
+            $valueRole = Role::create($rolValue);
+            RoleHierarchy::create([
+                'role_id' => $valueRole->id,
+                'hierarchy' => $key,
+            ]);
+        }
+
 
 
         /*  insert status  */
@@ -57,7 +122,7 @@ class UsersAndNotesSeeder extends Seeder
 
         array_push($statusIds, DB::getPdo()->lastInsertId());
         DB::table('status')->insert([
-            'name' => 'Inactivop',
+            'name' => 'Inactivo',
             'class' => 'secondary',
         ]);
 

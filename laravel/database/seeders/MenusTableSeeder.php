@@ -143,10 +143,23 @@ class MenusTableSeeder extends Seeder
             $this->insertLink('admin', 'Usuarios',    '/users');
             $this->insertLink('admin', 'Menu',    '/menu');
             $this->insertLink('admin', 'Roles','/roles');
-            // $this->insertLink('admin', 'BREAD',    '/bread');
             $this->insertLink('admin', 'Correo Electrónico',    '/email');
             $this->insertLink('admin', 'Departamentos',    '/departamento');
             $this->insertLink('admin', 'Municipios',    '/municipio');
+            // custom menu
+            $this->insertLink('admin', 'Sedes',    '/sede');
+            $this->insertLink('admin', 'Productos',    '/producto');
+            $this->insertLink('admin', 'Clientes',    '/cliente');
+            $this->insertLink('admin', 'Proveedores',    '/proveedores');
+            $this->insertLink('admin', 'Empresas',    '/empresas');
+            $this->insertLink('admin', 'Tipo de Pago',    '/tipo-pago');
+            $this->insertLink('admin', 'Tipo de Gastos',    '/tipo-gato');
+            $this->insertLink('admin', 'Medidas',    '/medidas');
+            $this->insertLink('admin', 'Productos',    '/productos');
+            $this->insertLink('admin', 'Formato Correlativos',    '/formato-correlativos');
+            $this->insertLink('admin', 'Correlativos',    '/correlativos');
+            $this->insertLink('admin', 'Sedes Empresas',    '/sedes-empresas');
+            /**************** */
         $this->endDropdown();
         $this->joinAllByTransaction(); ///   <===== Must by use on end of this seeder
     }

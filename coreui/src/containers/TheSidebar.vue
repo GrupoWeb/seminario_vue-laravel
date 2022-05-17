@@ -3,6 +3,7 @@
     fixed 
     :minimize="minimize"
     :show="show"
+    colorScheme="light"
     @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
   >
     <CSidebarBrand class="d-md-down-none" to="/">
@@ -10,7 +11,6 @@
         :fluidGrow="true"
         :src=logo
         block
-        class="mb-2"
         height="35"
         with="300"
       />
@@ -123,6 +123,7 @@ export default {
     }
   },
   mounted () {
+    console.log('store ',this.$store.state )
     this.$root.$on('toggle-sidebar', () => {
       const sidebarOpened = this.show === true || this.show === 'responsive'
       this.show = sidebarOpened ? false : 'responsive'
