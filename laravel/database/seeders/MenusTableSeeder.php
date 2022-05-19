@@ -161,6 +161,18 @@ class MenusTableSeeder extends Seeder
             $this->insertLink('admin', 'Sedes Empresas',    '/sedes-empresas');
             /**************** */
         $this->endDropdown();
+        $this->beginDropdown('admin', 'TransPort extraccion', '/settings', 'cil-puzzle');
+        $this->endDropdown();
+        $this->beginDropdown('admin', 'TransPort planta', '/settings', 'cil-puzzle');
+        $this->endDropdown();
+        $this->beginDropdown('admin', 'TransPort alquiler', '/settings', 'cil-puzzle');
+        $this->endDropdown();
+        $this->beginDropdown('admin', 'TransPort cemex', '/settings', 'cil-puzzle');
+        $this->endDropdown();
+        $this->beginDropdown('admin', 'Multi TransPort ', '/settings', 'cil-puzzle');
+        $this->endDropdown();
+        $this->beginDropdown('admin', 'TransPort Constructora', '/settings', 'cil-puzzle');
+        $this->endDropdown();
         $this->joinAllByTransaction(); ///   <===== Must by use on end of this seeder
     }
 }
