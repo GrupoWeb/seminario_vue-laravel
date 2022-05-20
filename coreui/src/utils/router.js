@@ -8,6 +8,8 @@ export const router = [
             municipios: 'api/municipios',
 
             getSede: 'api/getSedes',
+
+            getEmpresas: 'api/getEmpresas',
         },
         post: {
             departamentById: 'api/departamentoById',
@@ -21,8 +23,17 @@ export const router = [
             setSede: 'api/setSede',
             getMunicipioByIdSede: 'api/getMunicipioByIdSede',
             getSedeById: 'api/getSedeById',
-            updateSedeById: 'api/updateSedeById'
+            updateSedeById: 'api/updateSedeById',
 
+            setEmpresa: 'api/setEmpresa',
+            getEmpresaById: 'api/getEmpresaById',
+            updateEmpresa: 'api/updateEmpresa',
+
+        },
+
+        put: {
+            deleteSedeById: 'api/deleteSedeById',
+            deleteEmpresaById: 'api/deleteEmpresaById',
         }
     }
 ]

@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class SedeEmpresa extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+
+    /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+   protected $fillable = [
+       'id', 'sede_id','empresa_id'
+   ];
+
+   protected $dates = [
+       'deleted_at'
+   ];
 }

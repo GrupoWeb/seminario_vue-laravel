@@ -110,6 +110,7 @@ const Media = () => import('@/views/media/Media')
 const Departamento = () => import('@/views/modulos/departamento/departamentos');
 const Municipio = () => import('@/views/modulos/municipio/municipios');
 const Sede = () => import('@/views/modulos/sede/sede');
+const Empresa = () => import('@/views/modulos/empresa/empresa');
 
 
 Vue.use(Router)
@@ -338,6 +339,19 @@ function configRoutes () {
             {
               path: '',
               component: Sede,
+            }
+          ]
+        },
+        {
+          path: 'empresas',
+          meta: { label: 'empresa' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Empresa,
             }
           ]
         },

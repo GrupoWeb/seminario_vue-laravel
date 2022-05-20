@@ -9,6 +9,7 @@ use App\Models\Municipio;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Sede;
+use App\Models\Empresa;
 
 class CustomController extends Controller
 {
@@ -145,6 +146,7 @@ class CustomController extends Controller
         $sede = Sede::selectRaw('sedes.id as value, sedes.nombre as name, sedes.telefono as number, sedes.direccion as address, dep.nombre as departament, muni.nombre as municipality')
             ->join('departamentos as dep','dep.id','=','sedes.departamentos_id')
             ->join('municipios as muni','muni.id','=','sedes.municipio_id')
+            ->whereNull('sedes.deleted_at')
             ->get();
 
         return response()->json($sede, Response::HTTP_OK);
@@ -216,6 +218,94 @@ class CustomController extends Controller
             throw $th;
             DB::rollBack();
             return response()->json(['error'    =>  $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function deleteSedeById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $sede = Sede::find($request->id);
+
+            if($sede){
+                $sede->delete();
+            }
+
+            DB::commit();
+
+            return response()->json($sede, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json('failed ' .$th ,Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getEmpresas(){
+        return response()->json(Empresa::selectRaw('id as value, nombre as text')->whereNull('deleted_at')->get(),Response::HTTP_OK);
+    }
+
+    public function setEmpresa(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $empresa = Empresa::create([
+                'nombre'    =>  $request->name
+            ]);
+
+            DB::commit();
+
+            return response()->json($empresa, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getEmpresaById(Request $request){
+        return response()->json(
+            Empresa::selectRaw('id as value, nombre as name')->where(['id'  =>  $request->id])->get(),Response::HTTP_OK
+        );
+    }
+
+    public function updateEmpresa(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $empresa = Empresa::find($request->id);
+            if($empresa){
+                $empresa->update(['nombre'  =>  $request->name]);
+            }
+
+            DB::commit();
+
+            return response()->json($empresa,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function deleteEmpresaById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $empresa = Empresa::find($request->id);
+            if($empresa){
+                $empresa->delete();
+            }
+            DB::commit();
+
+            return response()->json($empresa, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
