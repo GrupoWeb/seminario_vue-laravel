@@ -57,12 +57,12 @@
                 
                     <template #editar="{item}">
                         <td>
-                        <CButton color="primary" @click="editDepartamento( item.id )">Editar</CButton>
+                        <CButton color="primary" @click="editDepartamento( item.value )">Editar</CButton>
                         </td>
                     </template>
                     <template #eliminar="{item}">
                         <td>
-                        <CButton color="danger" @click="deleteDepartamento( item.id )">Eliminar</CButton>
+                        <CButton color="danger" @click="deleteDepartamento( item.value )">Eliminar</CButton>
                         </td>
                     </template>
             </CDataTable>
@@ -82,7 +82,7 @@ import { router } from '../../../utils/router'
      data() {
          return {
             items: [],
-            fields: ['id', 'nombre', 'editar','eliminar'],
+            fields: [{key : 'value', label: 'Id'}, { key: 'text', label: "Nombre"}, 'editar','eliminar'],
             idModal: false,
             modalDelte: 'deleteModal',
             headerTextVariant: "light",

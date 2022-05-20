@@ -138,7 +138,7 @@ class MenusTableSeeder extends Seeder
         $this->insertLink('guest,user,admin', 'Dashboard', '/', 'cil-speedometer');
         $this->insertLink('guest', 'Entrar', '/login', 'cil-account-logout');
         $this->insertLink('guest', 'Registrar', '/register', 'cil-account-logout');
-        $this->beginDropdown('admin', 'Herramientas', '/settings', 'cil-puzzle');
+        $this->beginDropdown('admin', 'Catálogos', '/settings', 'cil-puzzle');
             $this->insertLink('admin', 'Carpetas',    '/media');
             $this->insertLink('admin', 'Usuarios',    '/users');
             $this->insertLink('admin', 'Menu',    '/menu');
@@ -148,7 +148,6 @@ class MenusTableSeeder extends Seeder
             $this->insertLink('admin', 'Municipios',    '/municipio');
             // custom menu
             $this->insertLink('admin', 'Sedes',    '/sede');
-            $this->insertLink('admin', 'Productos',    '/producto');
             $this->insertLink('admin', 'Clientes',    '/cliente');
             $this->insertLink('admin', 'Proveedores',    '/proveedores');
             $this->insertLink('admin', 'Empresas',    '/empresas');
@@ -159,19 +158,74 @@ class MenusTableSeeder extends Seeder
             $this->insertLink('admin', 'Formato Correlativos',    '/formato-correlativos');
             $this->insertLink('admin', 'Correlativos',    '/correlativos');
             $this->insertLink('admin', 'Sedes Empresas',    '/sedes-empresas');
+            $this->insertLink('admin', 'Marcas',    '/marca');
+            $this->insertLink('admin', 'Modelo',    '/modelo');
+            $this->insertLink('admin', 'Vehiculos',    '/vehiculo');
             /**************** */
         $this->endDropdown();
+        // Empresa 1
         $this->beginDropdown('admin', 'TransPort extraccion', '/settings', 'cil-puzzle');
+            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Inventario',    '/inventario');
+            $this->insertLink('admin', 'Venta',    '/venta');
+            $this->insertLink('admin', 'Pedido',    '/pedido');
+            $this->insertLink('admin', 'Despacho',    '/despacho');
+            $this->insertLink('admin', 'Facturación',    '/factura');
+            $this->insertLink('admin', 'Gasto',    '/gasto');
         $this->endDropdown();
+        // Empresa 2
         $this->beginDropdown('admin', 'TransPort planta', '/settings', 'cil-puzzle');
+            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Inventario',    '/inventario');
+            $this->insertLink('admin', 'Venta',    '/venta');
+            $this->insertLink('admin', 'Pedido',    '/pedido');
+            $this->insertLink('admin', 'Despacho',    '/despacho');
+            $this->insertLink('admin', 'Facturación',    '/factura');
+            $this->insertLink('admin', 'Gasto',    '/gasto');
         $this->endDropdown();
+        // Empresa 3
         $this->beginDropdown('admin', 'TransPort alquiler', '/settings', 'cil-puzzle');
+            $this->insertLink('admin', 'Solicitudes',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Inventario',    '/inventario');
+            $this->insertLink('admin', 'Venta',    '/venta');
+            $this->insertLink('admin', 'Pedido',    '/pedido');
+            $this->insertLink('admin', 'Despacho',    '/despacho');
+            $this->insertLink('admin', 'Facturación',    '/factura');
+            $this->insertLink('admin', 'Gasto',    '/gasto');
         $this->endDropdown();
+        // Empresa 4
         $this->beginDropdown('admin', 'TransPort cemex', '/settings', 'cil-puzzle');
+            $this->insertLink('admin', 'Solicitudes',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Inventario',    '/inventario');
+            $this->insertLink('admin', 'Venta',    '/venta');
+            $this->insertLink('admin', 'Pedido',    '/pedido');
+            $this->insertLink('admin', 'Despacho',    '/despacho');
+            $this->insertLink('admin', 'Facturación',    '/factura');
+            $this->insertLink('admin', 'Gasto',    '/gasto');
         $this->endDropdown();
+        // Empresa 5
         $this->beginDropdown('admin', 'Multi TransPort ', '/settings', 'cil-puzzle');
+            $this->insertLink('admin', 'Solicitudes',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Inventario',    '/inventario');
+            $this->insertLink('admin', 'Venta',    '/venta');
+            $this->insertLink('admin', 'Pedido',    '/pedido');
+            $this->insertLink('admin', 'Despacho',    '/despacho');
+            $this->insertLink('admin', 'Facturación',    '/factura');
+            $this->insertLink('admin', 'Gasto',    '/gasto');
         $this->endDropdown();
+        // Empresa 6
         $this->beginDropdown('admin', 'TransPort Constructora', '/settings', 'cil-puzzle');
+            $this->insertLink('admin', 'Proyectos',    '/proyecto');
+            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Inventario',    '/inventario');
+            $this->insertLink('admin', 'Venta',    '/venta');
+            $this->insertLink('admin', 'Pedido',    '/pedido');
+            $this->insertLink('admin', 'Despacho',    '/despacho');
+            $this->insertLink('admin', 'Facturación',    '/factura');
+            $this->insertLink('admin', 'Gasto',    '/gasto');
         $this->endDropdown();
         $this->joinAllByTransaction(); ///   <===== Must by use on end of this seeder
     }

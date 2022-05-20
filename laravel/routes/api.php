@@ -36,6 +36,12 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('updateMunicipioById','CustomController@updateMunicipio');
     Route::post('deleteMunicipio','CustomController@deleteMunicipio');
 
+    Route::get('getSedes','CustomController@getSede');
+    Route::post('setSede', 'CustomController@setSede');
+    Route::post('getMunicipioByIdSede','CustomController@getMunicipioByIdSede');
+    Route::post('getSedeById','CustomController@getSedeById');
+    Route::post('updateSedeById','CustomController@updateSedeById');
+
     /*********************************** */
 
     Route::resource('resource/{table}/resource', 'ResourceController');

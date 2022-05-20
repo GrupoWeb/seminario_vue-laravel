@@ -8,6 +8,7 @@ use App\Models\Departamento;
 use App\Models\Municipio;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Sede;
 
 class CustomController extends Controller
 {
@@ -27,7 +28,7 @@ class CustomController extends Controller
      * @return json
      */
     public function getDepartamentos(){
-        $dep = Departamento::select('id','nombre')->get();
+        $dep = Departamento::select('id as value','nombre as text')->get();
 
         return response()->json($dep, Response::HTTP_OK );
     }
@@ -81,7 +82,7 @@ class CustomController extends Controller
      * @return json
      */
     public function getMunicipios(){
-        $dep = Municipio::select('municipios.id','municipios.nombre', 'departamentos.nombre as departamento')
+        $dep = Municipio::select('municipios.id as value','municipios.nombre as text', 'departamentos.nombre as departamento')
         ->join('departamentos','municipios.departamentos_id','=','departamentos.id')
         ->get();
 
@@ -135,5 +136,87 @@ class CustomController extends Controller
         return response()->json($dep, Response::HTTP_OK);
     }
 
+
+    /**
+     * Methods for Sedes
+    */
+
+    public function getSede(){
+        $sede = Sede::selectRaw('sedes.id as value, sedes.nombre as name, sedes.telefono as number, sedes.direccion as address, dep.nombre as departament, muni.nombre as municipality')
+            ->join('departamentos as dep','dep.id','=','sedes.departamentos_id')
+            ->join('municipios as muni','muni.id','=','sedes.municipio_id')
+            ->get();
+
+        return response()->json($sede, Response::HTTP_OK);
+    }
+
+    /**
+     *  method add sede
+     * 
+     * @return Json Object
+     */
+
+     public function setSede(Request $request){
+
+         try {
+             DB::beginTransaction();
+
+             $sede = Sede::create([
+                 'nombre'           =>  $request->name,
+                 'telefono'         =>  $request->phone,
+                 'direccion'        =>  $request->address,
+                 'departamentos_id' =>  $request->departamento_id,
+                 'municipio_id'     =>  $request->municipio_id
+             ]);
+
+             DB::commit();
+
+             return response()->json(['success' =>  $sede], Response::HTTP_OK);
+         } catch (\Throwable $th) {
+             throw $th;
+             DB::rollBack();
+
+             return response()->json(['error'   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+         }
+     }
+
+     public function getMunicipioByIdSede(Request $request){
+         return response()->json(Municipio::selectRaw('id as value, nombre as text')->where(['departamentos_id' =>  $request->id])->get(), Response::HTTP_OK); 
+     }
+
+    public function getSedeById(Request $request){
+        return response()->json(
+            Sede::selectRaw('sedes.id as value, sedes.nombre as name, sedes.telefono as number, sedes.direccion as address, dep.id as departament, muni.id as municipality')
+            ->join('departamentos as dep','dep.id','=','sedes.departamentos_id')
+            ->join('municipios as muni','muni.id','=','sedes.municipio_id')
+            ->where(['sedes.id' => $request->id])
+            ->get(),Response::HTTP_OK);
+    }
+
+    public function updateSedeById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $sede = Sede::find($request->id);
+            if($sede){
+                $sede->update([
+                    'nombre'           =>  $request->name,
+                    'telefono'         =>  $request->phone,
+                    'direccion'        =>  $request->address,
+                    'departamentos_id' =>  $request->departamento_id,
+                    'municipio_id'     =>  $request->municipio_id
+                ]);
+            }
+
+
+            DB::commit();
+
+            return response()->json($sede, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error'    =>  $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }
