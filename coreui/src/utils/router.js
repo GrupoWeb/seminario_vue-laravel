@@ -10,6 +10,9 @@ export const router = [
             getSede: 'api/getSedes',
 
             getEmpresas: 'api/getEmpresas',
+            associateSedes: 'api/associateSedes',
+            associateEmpresas: 'api/associateEmpresas',
+            getTipoPago: 'api/getTipoPago',
         },
         post: {
             departamentById: 'api/departamentoById',
@@ -29,11 +32,18 @@ export const router = [
             getEmpresaById: 'api/getEmpresaById',
             updateEmpresa: 'api/updateEmpresa',
 
+            associateSedeEmpresa: 'api/associateSedeEmpresa',
+            getEmpresasAsociadas: 'api/getEmpresasAsociadas',
+            
+            setTipoPago: 'api/setTipoPago',
+            getTipoById: 'api/getTipoById',
         },
 
         put: {
             deleteSedeById: 'api/deleteSedeById',
             deleteEmpresaById: 'api/deleteEmpresaById',
+            updateTipoPagoById: 'api/updateTipoPagoById',
+            deleteTipoById: 'api/deleteTipoById',
         }
     }
 ]

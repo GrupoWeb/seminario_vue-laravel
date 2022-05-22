@@ -3,7 +3,7 @@
     <CCol col="12" xl="12">
       <transition name="slide">
       <CCard>
-        <CCardHeader>
+        <CCardHeader color="primary" textColor="white">
             Departamentos
         </CCardHeader>
         <CCardBody>

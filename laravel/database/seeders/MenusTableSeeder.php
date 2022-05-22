@@ -149,7 +149,6 @@ class MenusTableSeeder extends Seeder
             // custom menu
             $this->insertLink('admin', 'Empresas',    '/empresas');
             $this->insertLink('admin', 'Sedes',    '/sede');
-            $this->insertLink('admin', 'Sedes Empresas',    '/sedes-empresas');
             $this->insertLink('admin', 'Clientes',    '/cliente');
             $this->insertLink('admin', 'Proveedores',    '/proveedores');
             $this->insertLink('admin', 'Tipo de Pago',    '/tipo-pago');

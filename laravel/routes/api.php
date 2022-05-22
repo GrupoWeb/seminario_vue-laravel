@@ -48,6 +48,16 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('getEmpresaById', 'CustomController@getEmpresaById');
     Route::post('updateEmpresa','CustomController@updateEmpresa');
     Route::put('deleteEmpresaById', 'CustomController@deleteEmpresaById');
+    Route::get('associateSedes','CustomController@associateSedes');
+    Route::get('associateEmpresas','CustomController@associateEmpresas');
+    Route::post('associateSedeEmpresa','CustomController@associateSedeEmpresa');
+    Route::post('getEmpresasAsociadas','CustomController@getEmpresasAsociadas');
+
+    Route::get('getTipoPago','CustomController@getTipoPago');
+    Route::post('setTipoPago','CustomController@setTipoPago');
+    Route::post('getTipoById','CustomController@getTipoById');
+    Route::put('updateTipoPagoById','CustomController@updateTipoPagoById');
+    Route::put('deleteTipoById','CustomController@deleteTipoById');
 
 
 

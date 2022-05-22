@@ -69,7 +69,86 @@
                         </template>
                     </CModal>
 
-                    <CCardHeader>
+                    <b-modal
+                        @show="resetModal"
+                        @hidden="resetModal"
+                        @ok="handleOk"
+                        v-model="modal.asociar.show"
+                        :title="modal.asociar.title"
+                        :id="modal.asociar.id"
+                        :ref="modal.asociar.ref"
+                        :header-bg-variant="modal.asociar.header.color"
+                        :header-text-variant="modal.asociar.header.text"
+                        :footer-bg-variant="modal.asociar.footer.color"
+                        >
+
+                        <b-form ref="formAssociate" @submit.stop.prevent="handleSubmit">
+                            <b-form-group
+                                id="sede_id"
+                                label="Sede"
+                                label-for="sede_id"
+                                invalid-feedback="Sede es requerida"
+                                :state="formAssociate.sedeState"
+                                >
+                                <b-form-select
+                                    id="sede_id"
+                                    v-model="formAssociate.sede_id"
+                                    :options="associate.sedeOptions"
+                                    :state="formAssociate.sedeState"
+                                    required
+                                    ></b-form-select>
+                            </b-form-group>
+                            <b-form-group
+                                id="empresa_id"
+                                label="Empresa"
+                                label-for="empresa_id"
+                                invalid-feedback="Empresa es requerida"
+                                :state="formAssociate.empresaState"
+                                >
+                                <b-form-select
+                                    id="empresa_id"
+                                    v-model="formAssociate.empresa_id"
+                                    :options="associate.empresaOptions"
+                                    multiple :select-size="6"
+                                    :state="formAssociate.empresaState"
+                                    required
+                                    ></b-form-select>
+                            </b-form-group>
+                            <template #footer>
+                                <CButton @click="modal.asociar.show = !modal.asociar.show" color="danger">Cancelar</CButton>
+                                <CButton type="submit" color="success" >Guardar</CButton>
+                            </template>
+                        </b-form>
+
+                        <template #modal-footer="{ ok, cancel }">
+                            <b-button size="lg" variant="danger" @click="cancel()">
+                                Cancelar
+                            </b-button>
+                            <b-button size="lg" variant="success" @click="ok()">
+                                Guardar
+                            </b-button>
+                        </template>
+                    </b-modal>
+
+                    <b-modal
+                        v-model="modal.consulta.show"
+                        :title="modal.consulta.title"
+                        :id="modal.consulta.id"
+                        :ref="modal.consulta.ref"
+                        :header-bg-variant="modal.consulta.header.color"
+                        :header-text-variant="modal.consulta.header.text"
+                        :footer-bg-variant="modal.consulta.footer.color"
+                        >
+                        <CDataTable hover striped :items="table.consulta.item" :fields="table.consulta.fields" :items-per-page="10" pagination
+                            :noItemsView='{ noItems: "Sin Empresas Asociadas" }'>
+                        </CDataTable>
+                        <template #modal-footer="{ ok }">
+                            <b-button size="sm" variant="outline-primary" @click="ok()">
+                                Cerrar
+                            </b-button>
+                        </template>
+                        </b-modal>
+                    <CCardHeader color="primary" textColor="white">
                         Sucursales
                     </CCardHeader>
                     <CCardBody>
@@ -88,7 +167,12 @@
                             </template>
                             <template #asociar="{item}">
                                 <td>
-                                   <CButton color="info" @click="deleted( item.value )">Asociar</CButton>
+                                   <CButton color="info" @click="asociar( item.value )">Asociar</CButton>
+                                </td>
+                            </template>
+                            <template #empresas="{item}">
+                                <td>
+                                   <CButton color="success" @click="consulta( item.value )">Consultar</CButton>
                                 </td>
                             </template>
                         </CDataTable>
@@ -115,12 +199,54 @@ import { router } from '../../../utils/router';
                     departamento_id : 0,
                     municipio_id : 0
                 },
+                formAssociate: {
+                    sede_id:"",
+                    empresa_id : [],
+                    sedeState: null,
+                    empresaState: null,
+                },
+                associate:{
+                    sedeOptions: [],
+                    empresaOptions: []
+                },
                 modal: {
                     title: "Nueva Sucursal",
                     show: false,
                     color: "dark",
                     size: "lg",
-                    close: false
+                    close: false,
+                    asociar: {
+                        title: "Asociación de Empresas",
+                        show: false,
+                        color: "success",
+                        size: "sm",
+                        close: false,
+                        id: "associate",
+                        ref: "modal_associate",
+                        header: {
+                            color: "primary",
+                            text: "light"
+                            },
+                        footer: {
+                            color: "light",
+                            },
+                    },
+                    consulta: {
+                        title: "Empresas Asociadas",
+                        show: false,
+                        color: "success",
+                        size: "sm",
+                        close: false,
+                        id: "associate",
+                        ref: "modal_associate",
+                        header: {
+                            color: "primary",
+                            text: "light"
+                            },
+                        footer: {
+                            color: "light",
+                            },
+                    },
                 },
                 table: {
                     item: [],
@@ -133,8 +259,15 @@ import { router } from '../../../utils/router';
                         {key: 'municipality', label: 'Municipio'},
                         'editar',
                         'eliminar',
-                        'asociar'
-                        ]
+                        'asociar',
+                        { key: 'empresas', label: 'Empresas Asociadas'}
+                        ],
+                    consulta: {
+                        item: [],
+                        fields: [
+                            {key: 'name', label: 'Nombre de Empresa'},
+                            ],
+                    },
                 },
                 request: {
                     departamentos: [],
@@ -172,6 +305,7 @@ import { router } from '../../../utils/router';
             },
             show(){
                 this.modal.show = !this.modal.show
+                console.log("show", this.modal.show )
             },
             close(){
                 this.clearForm()
@@ -293,7 +427,69 @@ import { router } from '../../../utils/router';
                 .catch(error => {
                     this.message_error('Error del servidor ' + error)
                 })
-            }
+            },
+            asociar(id){
+                this.modal.asociar.show = !this.modal.asociar.show
+
+                const requestSede = axios.get(router[1].get.associateSedes + this.token)
+                const requestEmpresa = axios.get(router[1].get.associateEmpresas + this.token)
+
+                axios.all([requestSede, requestEmpresa])
+                .then(axios.spread((responseSede, responseEmpresa) => {
+                    this.associate.sedeOptions = responseSede.data
+                    this.associate.empresaOptions = responseEmpresa.data
+                }))
+            },
+            checkFormValidity(){
+                const valid = this.$refs.formAssociate.checkValidity()
+                this.formAssociate.sedeState = valid
+                this.formAssociate.empresaState = valid
+                console.log(valid)
+                return valid
+            },
+            handleOk(bvModalEvent){
+                bvModalEvent.preventDefault()
+                this.handleSubmit()
+                
+            },
+            handleSubmit(){
+                
+                if (!this.checkFormValidity()) {
+                    return
+                }
+
+                axios.post(router[1].post.associateSedeEmpresa + this.token,{
+                    sede_id: this.formAssociate.sede_id,
+                    empresa_id: this.formAssociate.empresa_id
+                })
+                .then(response => {
+                    if(response.status == 200){
+                        this.message_success('Asociación completada')
+                        this.$nextTick(() => {
+                            this.$bvModal.hide(this.modal.asociar.id)
+                        })
+                    }
+                })
+                .catch(error => {
+                    this.message_error('no se pudo asociar los datos' + error)
+                })
+
+            },
+            resetModal(){
+                this.formAssociate.sede_id = ""
+                this.formAssociate.empresa_id = []
+                this.formAssociate.sedeState = null
+                this.formAssociate.empresaState = null
+            },
+            consulta(id) {
+                this.modal.consulta.show = !this.modal.consulta.show
+                axios.post(router[1].post.getEmpresasAsociadas + this.token,{
+                    sede_id: id
+                })
+                .then(response => {
+                    this.table.consulta.item = response.data
+                })
+            },
 
             
         }   

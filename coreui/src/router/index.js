@@ -111,6 +111,7 @@ const Departamento = () => import('@/views/modulos/departamento/departamentos');
 const Municipio = () => import('@/views/modulos/municipio/municipios');
 const Sede = () => import('@/views/modulos/sede/sede');
 const Empresa = () => import('@/views/modulos/empresa/empresa');
+const TipoPago = () => import('@/views/modulos/tipoPagos/tipo-pago');
 
 
 Vue.use(Router)
@@ -352,6 +353,19 @@ function configRoutes () {
             {
               path: '',
               component: Empresa,
+            }
+          ]
+        },
+        {
+          path: 'tipo-pago',
+          meta: { label: 'tipo-pago' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: TipoPago,
             }
           ]
         },

@@ -32,7 +32,7 @@
                         </template>
                     </CModal>
 
-                    <CCardHeader>
+                    <CCardHeader color="primary" textColor="white">
                         Empresas
                     </CCardHeader>
                     <CCardBody>
