@@ -3,7 +3,7 @@
         <CCol col="12" xl="12">
             <CCard>
                 <CCardHeader color="primary" textColor="white">
-                    Tipos de Pago
+                    Medidas
                 </CCardHeader>
                 <CCardBody>
                     <CButton color="primary" class="m-2"  @click="show">Añadir</CButton>
@@ -83,7 +83,7 @@ import { router } from '../../../utils/router'
                 modal: {
                     getter: {
                         show: false,
-                        title: 'Nuevo Tipo de Pago',
+                        title: 'Nueva Medida',
                         id: 'tipoPago',
                         ref: 'tipoPago',
                         header: {
@@ -112,7 +112,7 @@ import { router } from '../../../utils/router'
                 
             },
             getTipos(){
-                axios.get(router[1].get.getTipoPago + this.token)
+                axios.get(router[1].get.getMedida + this.token)
                 .then(response => {
                     this.table.response.item = response.data
                 })
@@ -139,7 +139,7 @@ import { router } from '../../../utils/router'
                     return
                 }
 
-                axios.post(router[1].post.setTipoPago + this.token,{
+                axios.post(router[1].post.setMedida + this.token,{
                     name: this.form.name,
                 })
                 .then(response => {
@@ -175,7 +175,7 @@ import { router } from '../../../utils/router'
             edit(id){
                 this.flag = !this.flag
 
-                axios.post(router[1].post.getTipoById + this.token, {
+                axios.post(router[1].post.getMedidaById + this.token, {
                     tipo_id: id
                 })
                 .then(response => {
@@ -185,7 +185,7 @@ import { router } from '../../../utils/router'
                 this.show()
             },
             deleted(id){
-                axios.put(router[1].put.deleteTipoById + this.token,{
+                axios.put(router[1].put.deleteMedidaById + this.token,{
                     tipo_id: id
                 })
                 .then(response => {
@@ -202,7 +202,7 @@ import { router } from '../../../utils/router'
                 })
             },
             update(){
-                axios.put(router[1].put.updateTipoPagoById + this.token,{
+                axios.put(router[1].put.updateMedidaById + this.token,{
                     tipo_id: this.form.id,
                     name: this.form.name
                 })

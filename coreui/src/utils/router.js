@@ -6,44 +6,59 @@ export const router = [
         get: {
             departamentos: 'api/departamentos',
             municipios: 'api/municipios',
-
             getSede: 'api/getSedes',
-
             getEmpresas: 'api/getEmpresas',
             associateSedes: 'api/associateSedes',
             associateEmpresas: 'api/associateEmpresas',
             getTipoPago: 'api/getTipoPago',
+            getTipoGasto: 'api/getTipoGasto',
+            getMedida: 'api/getMedida',
+            getStringCorrelativo: 'api/getStringCorrelativo',
         },
         post: {
             departamentById: 'api/departamentoById',
             updateDepartamenoById: 'api/updateDepartamenoById',
             deleteDepartament: 'api/deleteDepartament',
-
             municipioById: 'api/municipioById',
             updateMunicipioById: 'api/updateMunicipioById',
             deleteMunicipio: 'api/deleteMunicipio',
-
             setSede: 'api/setSede',
             getMunicipioByIdSede: 'api/getMunicipioByIdSede',
             getSedeById: 'api/getSedeById',
             updateSedeById: 'api/updateSedeById',
-
             setEmpresa: 'api/setEmpresa',
             getEmpresaById: 'api/getEmpresaById',
             updateEmpresa: 'api/updateEmpresa',
-
             associateSedeEmpresa: 'api/associateSedeEmpresa',
             getEmpresasAsociadas: 'api/getEmpresasAsociadas',
-            
             setTipoPago: 'api/setTipoPago',
             getTipoById: 'api/getTipoById',
+            setTipoGasto: 'api/setTipoGasto',
+            getTipoGastoById: 'api/getTipoGastoById',
+            setMedida: 'api/setMedida',
+            getMedidaById: 'api/getMedidaById',
+            setStringCorrelativo: 'api/setStringCorrelativo',
+            getStringCorrelativoById: 'api/getStringCorrelativoById',
+            setCorrelativoInitial: 'api/setCorrelativoInitial',
+            getData: 'api/getData',
+            setData: 'api/setData',
+            updateData: 'api/updateData',
+            getDataById: 'api/getDataById',
         },
-
+        
         put: {
             deleteSedeById: 'api/deleteSedeById',
             deleteEmpresaById: 'api/deleteEmpresaById',
             updateTipoPagoById: 'api/updateTipoPagoById',
             deleteTipoById: 'api/deleteTipoById',
+            deleteTipoGastoById: 'api/deleteTipoGastoById',
+            updateTipoGastoById: 'api/updateTipoGastoById',
+            deleteMedidaById: 'api/deleteMedidaById',
+            updateMedidaById: 'api/updateMedidaById',
+            deleteStringCorrelativoById: 'api/deleteStringCorrelativoById',
+            updateStringCorrelativoById: 'api/updateStringCorrelativoById',
+            getUpdateDataById: 'api/getUpdateDataById',
+            getDeleteDataById: 'api/getDeleteDataById',
         }
     }
 ]

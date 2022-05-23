@@ -152,14 +152,11 @@ class MenusTableSeeder extends Seeder
             $this->insertLink('admin', 'Clientes',    '/cliente');
             $this->insertLink('admin', 'Proveedores',    '/proveedores');
             $this->insertLink('admin', 'Tipo de Pago',    '/tipo-pago');
-            $this->insertLink('admin', 'Tipo de Gastos',    '/tipo-gato');
+            $this->insertLink('admin', 'Tipo de Gastos',    '/tipo-gasto');
             $this->insertLink('admin', 'Medidas',    '/medidas');
             $this->insertLink('admin', 'Productos',    '/productos');
             $this->insertLink('admin', 'Formato Correlativos',    '/formato-correlativos');
-            $this->insertLink('admin', 'Correlativos',    '/correlativos');
-            $this->insertLink('admin', 'Marcas',    '/marca');
-            $this->insertLink('admin', 'Modelo',    '/modelo');
-            $this->insertLink('admin', 'Vehiculos',    '/vehiculo');
+            $this->insertLink('admin', 'Catalogo Vehiculo',    '/catalogo-vehiculo');
             /**************** */
         $this->endDropdown();
         // Empresa 1

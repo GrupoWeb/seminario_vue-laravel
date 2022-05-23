@@ -3,7 +3,7 @@
         <CCol col="12" xl="12">
             <CCard>
                 <CCardHeader color="primary" textColor="white">
-                    Tipos de Pago
+                    Formato de Correlativos
                 </CCardHeader>
                 <CCardBody>
                     <CButton color="primary" class="m-2"  @click="show">Añadir</CButton>
@@ -16,7 +16,19 @@
                             </template>
                             <template #eliminar="{item}">
                                 <td>
-                                   <CButton color="danger" @click="deleted( item.value )">Eliminar</CButton>
+                                   <CButton color="danger" @click="deleted( item.value )" v-if="item.numero > 0" disabled>Eliminar</CButton>
+                                   <CButton color="danger" @click="deleted( item.value )" v-else >Eliminar</CButton>
+                                </td>
+                            </template>
+                            <template #iniciar="{item}">
+                                <td>
+                                    <span v-if="item.numero > 0">Correlativo iniciado en: {{ item.numero }}</span>
+                                   <CButton color="info" @click="initial( item.value )" v-else>Iniciar</CButton>
+                                </td>
+                            </template>
+                            <template #correlativos="{item}">
+                                <td>
+                                    <span v-if="item.numero > 0">{{ item.name }}{{ item.numero }}-{{ item.year }} </span>
                                 </td>
                             </template>
                     </CDataTable>
@@ -57,6 +69,43 @@
                         </b-button>
                     </template>
             </b-modal>
+            <b-modal
+                @hidden="resetModal"
+                @ok="handleOkInitial"
+                v-model="modal.initial.show"
+                :title="modal.initial.title"
+                :id="modal.initial.id"
+                :ref="modal.initial.ref"
+                :header-bg-variant="modal.initial.header.color"
+                :header-text-variant="modal.initial.header.text"
+                :footer-bg-variant="modal.initial.footer.color"
+                >
+                    <b-form ref="formInitial" @submit.stop.prevent="handleSubmitInitial">
+                        <b-form-group
+                                id="Empresa"
+                                label="empresa"
+                                label-for="empresa_id"
+                                invalid-feedback="Dato Requerido"
+                                :state="form.empresaState"
+                                >
+                                <b-form-select
+                                    id="empresa_id"
+                                    v-model="form.initial.empresa_id"
+                                    :options="table.initial.options"
+                                    :state="form.initial.empresaState"
+                                    required
+                                    ></b-form-select>
+                        </b-form-group>
+                    </b-form>
+                    <template #modal-footer="{ ok, cancel}">
+                        <b-button size="sm" variant="danger" @click="cancel()">
+                            Cancelar
+                        </b-button>
+                        <b-button size="sm" variant="success" @click="ok()">
+                            Guardar
+                        </b-button>
+                    </template>
+            </b-modal>
         </CCol>
     </CRow>
 </template>
@@ -76,14 +125,20 @@ import { router } from '../../../utils/router'
                             { key: 'value' , label: "Id" },
                             { key: 'name' , label: "Descripción" },
                             'editar',
-                            'eliminar'
+                            'eliminar',
+                            'iniciar',
+                            'correlativos'
                             ]
+                    },
+                    initial: {
+                        options: [],
+
                     }
                 },
                 modal: {
                     getter: {
                         show: false,
-                        title: 'Nuevo Tipo de Pago',
+                        title: 'Nuevo Correlativo',
                         id: 'tipoPago',
                         ref: 'tipoPago',
                         header: {
@@ -93,12 +148,31 @@ import { router } from '../../../utils/router'
                         footer: {
                             color: "light"
                         }
-                    }
+                    },
+                    initial: {
+                        show: false,
+                        title: 'Iniciar Correlativo',
+                        id: 'initialCorrelativo',
+                        ref: 'initialCorrelativo',
+                        header: {
+                            color: "primary",
+                            text: "light"
+                        },
+                        footer: {
+                            color: "light"
+                        }
+                    },
+                    
                 },
                 form: {
                     id: 0,
                     name: "",
-                    tipoState: null
+                    tipoState: null,
+                    initial: {
+                        string_id: 0,
+                        empresa_id: 0,
+                        empresaState: null
+                    }
                 },
                 flag: false
             }
@@ -112,7 +186,7 @@ import { router } from '../../../utils/router'
                 
             },
             getTipos(){
-                axios.get(router[1].get.getTipoPago + this.token)
+                axios.get(router[1].get.getStringCorrelativo + this.token)
                 .then(response => {
                     this.table.response.item = response.data
                 })
@@ -123,6 +197,10 @@ import { router } from '../../../utils/router'
                 if(this.flag){
                     this.flag = !this.flag
                 }
+
+                this.form.initial.string_id = 0
+                this.form.initial.empresa_id = 0
+                this.form.initial.empresaState = null
             },
             handleOk(bvModalEvent){
                 bvModalEvent.preventDefault()
@@ -133,13 +211,18 @@ import { router } from '../../../utils/router'
                 this.form.tipoState = valid
                 return valid
             },
+            checkFormValidityInitial(){
+                const valid = this.$refs.formInitial.checkValidity()
+                this.form.initial.empresaState = valid
+                return valid
+            },
             handleSubmit(){
                 
                 if (!this.checkFormValidity()) {
                     return
                 }
 
-                axios.post(router[1].post.setTipoPago + this.token,{
+                axios.post(router[1].post.setStringCorrelativo + this.token,{
                     name: this.form.name,
                 })
                 .then(response => {
@@ -175,7 +258,7 @@ import { router } from '../../../utils/router'
             edit(id){
                 this.flag = !this.flag
 
-                axios.post(router[1].post.getTipoById + this.token, {
+                axios.post(router[1].post.getStringCorrelativoById + this.token, {
                     tipo_id: id
                 })
                 .then(response => {
@@ -185,7 +268,7 @@ import { router } from '../../../utils/router'
                 this.show()
             },
             deleted(id){
-                axios.put(router[1].put.deleteTipoById + this.token,{
+                axios.put(router[1].put.deleteStringCorrelativoById + this.token,{
                     tipo_id: id
                 })
                 .then(response => {
@@ -202,7 +285,7 @@ import { router } from '../../../utils/router'
                 })
             },
             update(){
-                axios.put(router[1].put.updateTipoPagoById + this.token,{
+                axios.put(router[1].put.updateStringCorrelativoById + this.token,{
                     tipo_id: this.form.id,
                     name: this.form.name
                 })
@@ -217,7 +300,44 @@ import { router } from '../../../utils/router'
                 }).catch(error => {
                     this.message_error('Error al actualizar el dato' + error);
                 })
-            }
+            },
+            initial(id){
+                this.modal.initial.show = !this.modal.initial.show
+                this.form.initial.string_id = id
+                this.getEmpresas()
+            },
+            getEmpresas(){
+                axios.get(router[1].get.getEmpresas + this.token)
+                .then(response => {
+                    this.table.initial.options = response.data
+                })
+            },
+            handleOkInitial(bvModalEvent){
+                bvModalEvent.preventDefault()
+                this.handleSubmitInitial()
+            },
+            handleSubmitInitial(){
+                if (!this.checkFormValidityInitial()) {
+                    return
+                }
+
+                axios.post(router[1].post.setCorrelativoInitial + this.token,{
+                    string_id: this.form.initial.string_id,
+                    empresa_id: this.form.initial.empresa_id
+                })
+                .then(response => {
+                    if(response.status == 200){
+                        this.getTipos()
+                        this.message_success('Asociación completada')
+                        this.$nextTick(() => {
+                            this.$bvModal.hide(this.modal.initial.id)
+                        })
+                    }
+                })
+                .catch(error => {
+                    this.message_error('no se pudo iniciar los datos' + error)
+                })
+            },
         }
         
     }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
-class Correlativo extends Model
+class Transmisiones extends Model
 {
     use HasFactory;
     use SoftDeletes;
@@ -19,7 +19,7 @@ class Correlativo extends Model
     * @var array
     */
    protected $fillable = [
-       'id', 'empresa_id', 'string_correlativo_id','numero','anio'
+       'id', 'nombre'
    ];
 
    protected $dates = [

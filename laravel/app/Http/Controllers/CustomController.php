@@ -12,6 +12,15 @@ use App\Models\Sede;
 use App\Models\Empresa;
 use App\Models\SedeEmpresa;
 use App\Models\TipoPago;
+use App\Models\TiposGasto;
+use App\Models\Medida;
+use App\Models\StringCorrelativo;
+use App\Models\Correlativo;
+use App\Models\Marca;
+use App\Models\Linea;
+use App\Models\Transmisiones;
+use App\Models\TipoVehiculo;
+use Carbon\Carbon;
 
 class CustomController extends Controller
 {
@@ -413,6 +422,314 @@ class CustomController extends Controller
         }
     }
 
+    public function getTipoGasto(){
+        return response()->json(TiposGasto::selectRaw('id as value, descripcion as name')->whereNull('deleted_at')->get(), Response::HTTP_OK);
+    }
+
+    public function setTipoGasto(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = TiposGasto::create([
+                'descripcion'   =>  $request->name
+            ]);
+
+            DB::commit();
+
+            return response()->json($tipo, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getTipoGastoById(Request $request){
+        return response()->json(TiposGasto::select('descripcion as name')->where(['id'    => $request->tipo_id])->get(), Response::HTTP_OK);
+    }
+    
+    public function deleteTipoGastoById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = TiposGasto::find($request->tipo_id);
+            if($tipo){
+                $tipo->delete();
+            }
+
+            DB::commit();
+            return response()->json($tipo,Response::HTTP_OK);
+
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' .$th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateTipoGastoById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = TiposGasto::find($request->tipo_id);
+            if($tipo){
+                $tipo->update(['descripcion'    =>  $request->name]);
+            }
+            DB::commit();
+
+            return response()->json($tipo,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' . $th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getMedida(){
+        return response()->json(Medida::selectRaw('id as value, nombre as name')->whereNull('deleted_at')->get(), Response::HTTP_OK);
+    }
+
+    public function setMedida(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = Medida::create([
+                'nombre'   =>  $request->name,
+                'status_id' =>  1
+            ]);
+
+            DB::commit();
+
+            return response()->json($tipo, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getMedidaById(Request $request){
+        return response()->json(Medida::select('nombre as name')->where(['id'    => $request->tipo_id])->get(), Response::HTTP_OK);
+    }
+    
+    public function deleteMedidaById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = Medida::find($request->tipo_id);
+            if($tipo){
+                $tipo->update(['status_id' =>  2]);
+                $tipo->delete();
+            }
+
+            DB::commit();
+            return response()->json($tipo,Response::HTTP_OK);
+
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' .$th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateMedidaById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = Medida::find($request->tipo_id);
+            if($tipo){
+                $tipo->update(['nombre'    =>  $request->name]);
+            }
+            DB::commit();
+
+            return response()->json($tipo,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' . $th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getStringCorrelativo(){
+        return response()->json(
+            StringCorrelativo::selectRaw('string_correlativos.id as value, ucase(string_correlativos.correlativo) as name, correlativos.numero , 
+            correlativos.anio as year' )
+            ->leftJoin('correlativos', 'correlativos.string_correlativo_id','string_correlativos.id')
+            ->whereNull('string_correlativos.deleted_at')
+            ->get(), Response::HTTP_OK);
+    }
+
+    public function setStringCorrelativo(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = StringCorrelativo::create([
+                'correlativo'   =>  $request->name
+            ]);
+
+            DB::commit();
+
+            return response()->json($tipo, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getStringCorrelativoById(Request $request){
+        return response()->json(StringCorrelativo::select('correlativo as name')->where(['id'    => $request->tipo_id])->get(), Response::HTTP_OK);
+    }
+    
+    public function deleteStringCorrelativoById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = StringCorrelativo::find($request->tipo_id);
+            if($tipo){
+                $tipo->delete();
+            }
+
+            DB::commit();
+            return response()->json($tipo,Response::HTTP_OK);
+
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' .$th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateStringCorrelativoById(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $tipo = StringCorrelativo::find($request->tipo_id);
+            if($tipo){
+                $tipo->update(['correlativo'    =>  $request->name]);
+            }
+            DB::commit();
+
+            return response()->json($tipo,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' . $th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function setCorrelativoInitial(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $year = Carbon::now();
+
+            $correlativo = Correlativo::create([
+                'empresa_id'                =>  $request->empresa_id,
+                'string_correlativo_id'     =>  $request->string_id,
+                'numero'                    =>  1,
+                'anio'                      =>  $year->isoFormat('YYYY')
+            ]);
+
+
+            DB::commit();
+
+            return response()->json($correlativo, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' . $th], Response::HTTP_INSTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    public function getData(Request $request){
+        return response()->json(
+            DB::table($request->model)->selectRaw('id as value, nombre as name')->whereNull('deleted_at')->get()
+            , Response::HTTP_OK);
+    }
+
+    public function setData(Request $request){
+        try {
+            DB::beginTransaction();
+            $dato = DB::table($request->model)->INSERT([
+                'nombre'        =>  $request->name,
+                'created_at'    =>  Carbon::now(),
+                'updated_at'    =>  Carbon::now()
+            ]);
+
+            DB::commit();
+
+            return response()->json($dato, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateData(Request $request){
+        try {
+            DB::beginTransaction();
+            $dato = DB::table($request->model)->where(['id' =>  $request->id])->update([
+                'nombre'        =>  $request->name,
+            ]);
+
+            DB::commit();
+
+            return response()->json($dato, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getDataById(Request $request){
+        try {
+            DB::beginTransaction();
+            $dato = DB::table($request->model)->where(['id' =>  $request->id])->selectRaw('id as value, nombre as name')->get();
+
+            DB::commit();
+
+            return response()->json($dato, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getUpdateDataById(Request $request){
+        try {
+            DB::beginTransaction();
+            $dato = DB::table($request->model)->where(['id' =>  $request->id])->update(['nombre'    =>  $request->name]);
+
+            DB::commit();
+
+            return response()->json($dato, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    public function getDeleteDataById(Request $request){
+        try {
+            DB::beginTransaction();
+            $dato = DB::table($request->model)->where(['id' =>  $request->id])
+            ->update(['deleted_at'    =>  Carbon::now()]);
+
+            DB::commit();
+
+            return response()->json($dato, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
     
 
 }

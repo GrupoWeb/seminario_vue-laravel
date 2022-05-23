@@ -58,7 +58,32 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('getTipoById','CustomController@getTipoById');
     Route::put('updateTipoPagoById','CustomController@updateTipoPagoById');
     Route::put('deleteTipoById','CustomController@deleteTipoById');
+    
+    Route::get('getTipoGasto','CustomController@getTipoGasto');
+    Route::post('setTipoGasto','CustomController@setTipoGasto');
+    Route::post('getTipoGastoById','CustomController@getTipoGastoById');
+    Route::put('deleteTipoGastoById','CustomController@deleteTipoGastoById');
+    Route::put('updateTipoGastoById','CustomController@updateTipoGastoById');
 
+    Route::get('getMedida','CustomController@getMedida');
+    Route::post('setMedida','CustomController@setMedida');
+    Route::post('getMedidaById','CustomController@getMedidaById');
+    Route::put('deleteMedidaById','CustomController@deleteMedidaById');
+    Route::put('updateMedidaById','CustomController@updateMedidaById');
+
+    Route::get('getStringCorrelativo','CustomController@getStringCorrelativo');
+    Route::post('setStringCorrelativo','CustomController@setStringCorrelativo');
+    Route::post('getStringCorrelativoById','CustomController@getStringCorrelativoById');
+    Route::put('deleteStringCorrelativoById','CustomController@deleteStringCorrelativoById');
+    Route::put('updateStringCorrelativoById','CustomController@updateStringCorrelativoById');
+
+    Route::post('setCorrelativoInitial', 'CustomController@setCorrelativoInitial');
+    Route::post('getData', 'CustomController@getData');
+    Route::post('setData', 'CustomController@setData');
+    Route::post('updateData', 'CustomController@updateData');
+    Route::post('getDataById', 'CustomController@getDataById');
+    Route::put('getUpdateDataById', 'CustomController@getUpdateDataById');
+    Route::put('getDeleteDataById', 'CustomController@getDeleteDataById');
 
 
     /*********************************** */

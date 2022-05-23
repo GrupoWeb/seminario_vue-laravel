@@ -112,6 +112,10 @@ const Municipio = () => import('@/views/modulos/municipio/municipios');
 const Sede = () => import('@/views/modulos/sede/sede');
 const Empresa = () => import('@/views/modulos/empresa/empresa');
 const TipoPago = () => import('@/views/modulos/tipoPagos/tipo-pago');
+const TipoGasto = () => import('@/views/modulos/tipoGasto/tipo-gasto');
+const Medidas = () => import('@/views/modulos/medidas/medida');
+const Correlativos = () => import('@/views/modulos/stringCorrelativos/formato-correlativos');
+const catalogoVehiculo = () => import('@/views/modulos/vehiculos/catalogos');
 
 
 Vue.use(Router)
@@ -175,38 +179,6 @@ function configRoutes () {
           path: 'dashboard',
           name: 'Dashboard',
           component: Dashboard
-        },
-        {
-          path: 'colors',
-          name: 'Colors',
-          component: Colors,
-          meta:{
-            requiresUser: true
-          }
-        },
-        {
-          path: 'typography',
-          name: 'Typography',
-          component: Typography,
-          meta:{
-            requiresUser: true
-          }
-        },
-        {
-          path: 'charts',
-          name: 'Charts',
-          component: Charts,
-          meta:{
-            requiresUser: true
-          }
-        },
-        {
-          path: 'widgets',
-          name: 'Widgets',
-          component: Widgets,
-          meta:{
-            requiresUser: true
-          }
         },
         {
           path: 'menu',
@@ -370,6 +342,58 @@ function configRoutes () {
           ]
         },
         {
+          path: 'tipo-gasto',
+          meta: { label: 'tipo-gasto' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: TipoGasto,
+            }
+          ]
+        },
+        {
+          path: 'medidas',
+          meta: { label: 'medidas' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Medidas,
+            }
+          ]
+        },
+        {
+          path: 'formato-correlativos',
+          meta: { label: 'formato-correlativos' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Correlativos,
+            }
+          ]
+        },
+        {
+          path: 'catalogo-vehiculo',
+          meta: { label: 'catalogo-vehiculo' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: catalogoVehiculo,
+            }
+          ]
+        },
+        {
           path: 'users',
           meta: { label: 'Users'},
           component: {
@@ -399,49 +423,6 @@ function configRoutes () {
               component: EditUser,
               meta:{
                 requiresAdmin: true
-              }
-            },
-          ]
-        },
-        {
-          path: 'notes',
-          meta: { label: 'Notes'},
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: '',
-              component: Notes,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'create',
-              meta: { label: 'Create Note' },
-              name: 'Create Note',
-              component: CreateNote,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: ':id',
-              meta: { label: 'Note Details'},
-              name: 'Note',
-              component: Note,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: ':id/edit',
-              meta: { label: 'Edit Note' },
-              name: 'Edit Note',
-              component: EditNote,
-              meta:{
-                requiresUser: true
               }
             },
           ]
@@ -483,58 +464,6 @@ function configRoutes () {
               meta: { label: 'Edit Role' },
               name: 'Edit Role',
               component: EditRole,
-              meta:{
-                requiresAdmin: true
-              }
-            },
-          ]
-        },
-        {
-          path: 'bread',
-          meta: { label: 'Bread'},
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: '',
-              component: Breads,
-              meta:{
-                requiresAdmin: true
-              }
-            },
-            {
-              path: 'create',
-              meta: { label: 'Create Bread' },
-              name: 'CreateBread',
-              component: CreateBread,
-              meta:{
-                requiresAdmin: true
-              }
-            },
-            {
-              path: ':id',
-              meta: { label: 'Bread Details'},
-              name: 'Bread',
-              component: Bread,
-              meta:{
-                requiresAdmin: true
-              }
-            },
-            {
-              path: ':id/edit',
-              meta: { label: 'Edit Bread' },
-              name: 'Edit Bread',
-              component: EditBread,
-              meta:{
-                requiresAdmin: true
-              }
-            },
-            {
-              path: ':id/delete',
-              meta: { label: 'Delete Bread' },
-              name: 'Delete Bread',
-              component: DeleteBread,
               meta:{
                 requiresAdmin: true
               }
@@ -630,251 +559,6 @@ function configRoutes () {
             },
           ]
         },
-        {
-          path: 'base',
-          redirect: '/base/cards',
-          name: 'Base',
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'cards',
-              name: 'Cards',
-              component: Cards,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'forms',
-              name: 'Forms',
-              component: Forms,
-            },
-            {
-              path: 'switches',
-              name: 'Switches',
-              component: Switches,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'tables',
-              name: 'Tables',
-              component: Tables,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'tabs',
-              name: 'Tabs',
-              component: Tabs,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'breadcrumb',
-              name: 'Breadcrumb',
-              component: Breadcrumbs,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'carousel',
-              name: 'Carousel',
-              component: Carousels,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'collapse',
-              name: 'Collapse',
-              component: Collapses,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'jumbotron',
-              name: 'Jumbotron',
-              component: Jumbotrons,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'list-group',
-              name: 'List Group',
-              component: ListGroups,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'navs',
-              name: 'Navs',
-              component: Navs,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'navbars',
-              name: 'Navbars',
-              component: Navbars,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'pagination',
-              name: 'Pagination',
-              component: Paginations,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'popovers',
-              name: 'Popovers',
-              component: Popovers,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'progress',
-              name: 'Progress',
-              component: ProgressBars,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'tooltips',
-              name: 'Tooltips',
-              component: Tooltips,
-              meta:{
-                requiresUser: true
-              }
-            }
-          ]
-        },
-        {
-          path: 'buttons',
-          redirect: '/buttons/standard-buttons',
-          name: 'Buttons',
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'buttons',
-              name: 'Standard Buttons',
-              component: StandardButtons,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'button-group',
-              name: 'Button Group',
-              component: ButtonGroups,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'dropdowns',
-              name: 'Dropdowns',
-              component: Dropdowns,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'brand-buttons',
-              name: 'Brand Buttons',
-              component: BrandButtons,
-              meta:{
-                requiresUser: true
-              }
-            }
-          ]
-        },
-        {
-          path: 'icon',
-          redirect: '/icons/coreui-icons',
-          name: 'CoreUI Icons',
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'coreui-icons',
-              name: 'Icons library',
-              component: CoreUIIcons,
-              // meta:{
-              //   requiresUser: true
-              // }
-            },
-            {
-              path: 'brands',
-              name: 'Brands',
-              component: Brands,
-              // meta:{
-              //   requiresUser: true
-              // }
-            },
-            {
-              path: 'flags',
-              name: 'Flags',
-              component: Flags,
-              // meta:{
-              //   requiresUser: true
-              // }
-            }
-          ]
-        },
-        {
-          path: 'notifications',
-          redirect: '/notifications/alerts',
-          name: 'Notifications',
-          component: {
-            render (c) { return c('router-view') }
-          },
-          children: [
-            {
-              path: 'alerts',
-              name: 'Alerts',
-              component: Alerts,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'badge',
-              name: 'Badge',
-              component: Badges,
-              meta:{
-                requiresUser: true
-              }
-            },
-            {
-              path: 'modals',
-              name: 'Modals',
-              component: Modals,
-              meta:{
-                requiresUser: true
-              }
-            }
-          ]
-        }
       ]
     },
     {
