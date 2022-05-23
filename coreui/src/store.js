@@ -4,7 +4,8 @@ Vue.use(Vuex)
 
 const state = {
   sidebarShow: 'responsive',
-  sidebarMinimize: false
+  sidebarMinimize: false,
+  isVisible: false,
 }
 
 const mutations = {

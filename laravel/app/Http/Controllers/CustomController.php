@@ -20,6 +20,7 @@ use App\Models\Marca;
 use App\Models\Linea;
 use App\Models\Transmisiones;
 use App\Models\TipoVehiculo;
+use App\Models\Proveedores;
 use Carbon\Carbon;
 
 class CustomController extends Controller
@@ -730,6 +731,99 @@ class CustomController extends Controller
             return response()->json(['error '   => $th], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
 
+    public function setProveedores(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $flag = Proveedores::where(['nit'   =>  $request->nit])->whereNull('deleted_at')->exists();
+
+            if(!$flag){
+                $prov = Proveedores::create([
+                    'nombre'        =>  $request->nombre,
+                    'nit'           =>  $request->nit,
+                    'direccion'     =>  $request->direccion,
+                    'telefono'      =>  $request->telefono,
+                    'contacto'      =>  $request->contacto
+                ]);
+                DB::commit();
+    
+                return response()->json($prov, Response::HTTP_OK);
+            }else{
+                return response()->json(false, Response::HTTP_NO_CONTENT);
+            }
+
+
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getProveedores(){
+        return response()->json(
+            Proveedores::selectRaw('id as value, nombre as name, nit, direccion as address, telefono as phone, contacto as contact')
+            ->whereNull('deleted_at')->get(),
+            Response::HTTP_OK
+        );
+    }
+
+    public function getProveedoresById(Request $request){
+        return response()->json(
+            Proveedores::selectRaw('id as value, nombre as name, nit, direccion as address, telefono as phone, contacto as contact')
+            ->whereNull('deleted_at')
+            ->where(['id'   =>  $request->id])->get(),
+            Response::HTTP_OK
+        );
+    }
+
+    public function updateProveedores(Request $request){
+        try {
+            DB::beginTransaction();
+            
+            $prov = Proveedores::find($request->id);
+
+            if($prov){
+                $prov->update([
+                    'nombre'        =>  $request->nombre,
+                    'nit'           =>  $request->nit,
+                    'direccion'     =>  $request->direccion,
+                    'telefono'      =>  $request->telefono,
+                    'contacto'      =>  $request->contacto
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json($prov, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function deleteProveedores(Request $request){
+        try {
+            DB::beginTransaction();
+            
+            $prov = Proveedores::find($request->id);
+
+            if($prov){
+                $prov->delete();
+            }
+
+            DB::commit();
+
+            return response()->json($prov, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

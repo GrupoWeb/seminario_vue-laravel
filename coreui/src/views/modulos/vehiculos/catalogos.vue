@@ -186,7 +186,7 @@ import { router } from '../../../utils/router'
                     Model:"",
                     getter: {
                         show: false,
-                        title: 'Nuevo Correlativo',
+                        title: 'Nuevo Registro',
                         id: 'tipoPago',
                         ref: 'tipoPago',
                         header: {

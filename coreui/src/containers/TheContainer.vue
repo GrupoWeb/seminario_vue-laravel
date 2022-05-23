@@ -6,6 +6,9 @@
       <div class="c-body">
         <main class="c-main">
           <CContainer fluid>
+            <Loader
+                :is-visible="this.$store.state.isVisible"
+            />
             <transition name="fade">
               <router-view></router-view>
             </transition>
@@ -19,12 +22,14 @@
 <script>
 import TheSidebar from './TheSidebar'
 import TheHeader from './TheHeader'
+import Loader from '@/views/modulos/loader/Loader'
 
 export default {
   name: 'TheContainer',
   components: {
     TheSidebar,
-    TheHeader
+    TheHeader,
+    Loader
   }
 }
 </script>

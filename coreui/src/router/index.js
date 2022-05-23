@@ -116,6 +116,8 @@ const TipoGasto = () => import('@/views/modulos/tipoGasto/tipo-gasto');
 const Medidas = () => import('@/views/modulos/medidas/medida');
 const Correlativos = () => import('@/views/modulos/stringCorrelativos/formato-correlativos');
 const catalogoVehiculo = () => import('@/views/modulos/vehiculos/catalogos');
+const Productos = () => import('@/views/modulos/productos/producto');
+const Proveedor = () => import('@/views/modulos/proveedores/proveedor');
 
 
 Vue.use(Router)
@@ -390,6 +392,32 @@ function configRoutes () {
             {
               path: '',
               component: catalogoVehiculo,
+            }
+          ]
+        },
+        {
+          path: 'productos',
+          meta: { label: 'Productos' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Productos,
+            }
+          ]
+        },
+        {
+          path: 'proveedores',
+          meta: { label: 'Proveedores' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Proveedor,
             }
           ]
         },

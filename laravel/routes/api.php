@@ -85,6 +85,12 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::put('getUpdateDataById', 'CustomController@getUpdateDataById');
     Route::put('getDeleteDataById', 'CustomController@getDeleteDataById');
 
+    Route::post('setProveedores','CustomController@setProveedores');
+    Route::get('getProveedores','CustomController@getProveedores');
+    Route::post('getProveedoresById','CustomController@getProveedoresById');
+    Route::put('updateProveedores','CustomController@updateProveedores');
+    Route::put('deleteProveedores','CustomController@deleteProveedores');
+
 
     /*********************************** */
 

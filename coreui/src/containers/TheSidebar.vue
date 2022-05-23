@@ -123,7 +123,7 @@ export default {
     }
   },
   mounted () {
-    console.log('store ',this.$store.state )
+    
     this.$root.$on('toggle-sidebar', () => {
       const sidebarOpened = this.show === true || this.show === 'responsive'
       this.show = sidebarOpened ? false : 'responsive'
