@@ -17,6 +17,10 @@ export const router = [
             sat: 'https://dev.mineco.gob.gt/web-quejaini/rs/proveedores/aprobar?nit=',
             getProveedores: 'api/getProveedores',
             getClientes: 'api/getClientes',
+            getProductos: 'api/getProductos',
+            getMedidas:'api/getMedidas',
+            getSucursal:'api/getSucursal',
+            getInventario: 'api/getInventario',
         },
         post: {
             departamentById: 'api/departamentoById',
@@ -51,6 +55,7 @@ export const router = [
             getProveedoresById: 'api/getProveedoresById',
             setClientes: 'api/setClientes',
             getClienteById: 'api/getClienteById',
+            setInventario: 'api/setInventario',
         },
         
         put: {
@@ -69,6 +74,8 @@ export const router = [
             updateProveedores: 'api/updateProveedores',
             deleteProveedores: 'api/deleteProveedores',
             deleteClientes: 'api/deleteClientes',
+            updateStock: 'api/updateStock',
+            deleteStock: 'api/deleteStock',
         }
     }
 ]

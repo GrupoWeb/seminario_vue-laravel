@@ -65,6 +65,17 @@ return [
             'url' => env('AWS_URL'),
         ],
 
+        'productos' => [
+            'driver'        =>  'local',
+            'root'          =>  storage_path('app'),
+            'permissions'   =>  [
+                'productos' =>  [
+                    'public'    =>  0664,
+                    'private'   =>  0600
+                ]
+            ]
+        ]
+
     ],
 
 ];

@@ -19,7 +19,7 @@ class CreateInventariosTable extends Migration
             $table->foreignId('medida_id')->constrained();
             $table->foreignId('proveedores_id')->constrained();
             $table->text('path_imagen');
-            $table->decimal('precio',2);
+            $table->decimal('precio',6);
             $table->integer('stock');
             $table->foreignId('sede_empresa_id')->constrained();
             $table->timestamps();

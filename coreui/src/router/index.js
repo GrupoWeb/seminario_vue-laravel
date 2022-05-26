@@ -119,6 +119,7 @@ const catalogoVehiculo = () => import('@/views/modulos/vehiculos/catalogos');
 const Productos = () => import('@/views/modulos/productos/producto');
 const Proveedor = () => import('@/views/modulos/proveedores/proveedor');
 const Cliente = () => import('@/views/modulos/clientes/cliente');
+const Inventario = () => import('@/views/modulos/inventarios/inventario');
 
 
 Vue.use(Router)
@@ -432,6 +433,19 @@ function configRoutes () {
             {
               path: '',
               component: Cliente,
+            }
+          ]
+        },
+        {
+          path: 'inventario',
+          meta: { label: 'Módulo de Inventario' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Inventario,
             }
           ]
         },

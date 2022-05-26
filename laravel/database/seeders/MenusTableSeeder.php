@@ -161,7 +161,7 @@ class MenusTableSeeder extends Seeder
         $this->endDropdown();
         // Empresa 1
         $this->beginDropdown('admin', 'TransPort extraccion', '/settings', 'cil-puzzle');
-            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/productos');
             $this->insertLink('admin', 'Inventario',    '/inventario');
             $this->insertLink('admin', 'Venta',    '/venta');
             $this->insertLink('admin', 'Pedido',    '/pedido');
@@ -171,7 +171,7 @@ class MenusTableSeeder extends Seeder
         $this->endDropdown();
         // Empresa 2
         $this->beginDropdown('admin', 'TransPort planta', '/settings', 'cil-puzzle');
-            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/productos');
             $this->insertLink('admin', 'Inventario',    '/inventario');
             $this->insertLink('admin', 'Venta',    '/venta');
             $this->insertLink('admin', 'Pedido',    '/pedido');
@@ -182,7 +182,7 @@ class MenusTableSeeder extends Seeder
         // Empresa 3
         $this->beginDropdown('admin', 'TransPort alquiler', '/settings', 'cil-puzzle');
             $this->insertLink('admin', 'Solicitudes',    '/producto');
-            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/productos');
             $this->insertLink('admin', 'Inventario',    '/inventario');
             $this->insertLink('admin', 'Venta',    '/venta');
             $this->insertLink('admin', 'Pedido',    '/pedido');
@@ -193,7 +193,7 @@ class MenusTableSeeder extends Seeder
         // Empresa 4
         $this->beginDropdown('admin', 'TransPort cemex', '/settings', 'cil-puzzle');
             $this->insertLink('admin', 'Solicitudes',    '/producto');
-            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/productos');
             $this->insertLink('admin', 'Inventario',    '/inventario');
             $this->insertLink('admin', 'Venta',    '/venta');
             $this->insertLink('admin', 'Pedido',    '/pedido');
@@ -204,7 +204,7 @@ class MenusTableSeeder extends Seeder
         // Empresa 5
         $this->beginDropdown('admin', 'Multi TransPort ', '/settings', 'cil-puzzle');
             $this->insertLink('admin', 'Solicitudes',    '/producto');
-            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/productos');
             $this->insertLink('admin', 'Inventario',    '/inventario');
             $this->insertLink('admin', 'Venta',    '/venta');
             $this->insertLink('admin', 'Pedido',    '/pedido');
@@ -215,7 +215,7 @@ class MenusTableSeeder extends Seeder
         // Empresa 6
         $this->beginDropdown('admin', 'TransPort Constructora', '/settings', 'cil-puzzle');
             $this->insertLink('admin', 'Proyectos',    '/proyecto');
-            $this->insertLink('admin', 'Producto',    '/producto');
+            $this->insertLink('admin', 'Producto',    '/productos');
             $this->insertLink('admin', 'Inventario',    '/inventario');
             $this->insertLink('admin', 'Venta',    '/venta');
             $this->insertLink('admin', 'Pedido',    '/pedido');

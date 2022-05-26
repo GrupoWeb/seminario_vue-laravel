@@ -22,7 +22,10 @@ use App\Models\Transmisiones;
 use App\Models\TipoVehiculo;
 use App\Models\Proveedores;
 use App\Models\Clientes;
+use App\Models\Productos;
+use App\Models\Inventario;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class CustomController extends Controller
 {
@@ -765,7 +768,7 @@ class CustomController extends Controller
 
     public function getProveedores(){
         return response()->json(
-            Proveedores::selectRaw('id as value, nombre as name, nit, direccion as address, telefono as phone, contacto as contact')
+            Proveedores::selectRaw('id as value, nombre as text, nit, direccion as address, telefono as phone, contacto as contact')
             ->whereNull('deleted_at')->get(),
             Response::HTTP_OK
         );
@@ -896,6 +899,106 @@ class CustomController extends Controller
             DB::rollBack();
 
             return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getProductos(){
+        return response()->json(Productos::selectRaw('id as value, nombre as text')->whereNull('deleted_at')->get(),Response::HTTP_OK);
+    }
+
+    public function getMedidas(){
+        return response()->json(Medida::selectRaw('id as value, nombre as text')->whereNull('deleted_at')->get(),Response::HTTP_OK);
+    }
+
+    public function getSucursal(){
+        return response()->json(SedeEmpresa::selectRaw('sede_empresas.id as value, sedes.nombre as text')
+        ->join('sedes', 'sedes.id','=','sede_empresas.sede_id')
+        ->join('empresas','empresas.id','=','sede_empresas.empresa_id')
+        ->whereNull('sede_empresas.deleted_at')->get(),Response::HTTP_OK);
+    }
+
+    public function setInventario(Request $request){
+        
+        $request->validate([
+            'files'  =>  'required|mimes:jpeg,bmp,png|max:500'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $nomenclatura = "producto_". Carbon::now()->isoFormat('Y_m_d')."-". Carbon::now()->isoFormat('H_mm_ss'). ".".$request->file('files')->getClientOriginalExtension();
+            $filePath = Storage::disk('productos')->putFileAs('productos',$request->file('files'), $nomenclatura);
+
+            $inv = Inventario::create([
+                'producto_id'       =>      $request->producto_id,
+                'medida_id'         =>      $request->medida_id,
+                'proveedores_id'    =>      $request->proveedores_id,
+                'path_imagen'       =>      $filePath,
+                'precio'            =>      (double)$request->precio,
+                'stock'             =>      $request->stock,
+                'sede_empresa_id'   =>      $request->sede_empresa_id
+
+            ]);
+
+            DB::commit();
+            return response()->json($inv, Response::HTTP_OK);
+            throw new Exception('Error al subir');
+
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            if($filePath){
+                Storage::delete($filePath);
+            }
+            return response()->json(['error '.$th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getInventario(){
+        return response()->json(
+            Inventario::selectRaw('inventarios.id as value,productos.nombre as producto_name,medidas.nombre as medida_name, proveedores.nombre as proveedor_name, inventarios.precio, inventarios.stock, sedes.nombre as sucursal_name')
+            ->join('productos','productos.id','=','inventarios.producto_id')
+            ->join('medidas','medidas.id','=','inventarios.medida_id')
+            ->join('proveedores','proveedores.id','=','inventarios.proveedores_id')
+            ->join('sede_empresas','sede_empresas.id','=','inventarios.sede_empresa_id')
+            ->join('sedes','sedes.id','=','sede_empresas.id')
+            ->whereNull('inventarios.deleted_at')
+            ->get(),Response::HTTP_OK);
+    }
+
+    public function updateStock(Request $request){
+        try {
+            DB::beginTransaction();
+            $up = Inventario::find($request->id);
+            if($up){
+                $up->update(['stock'    =>  ($request->stock + $request->update)]);
+            }
+
+
+            DB::commit();
+            return response()->json($up, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '.$th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function deleteStock(Request $request){
+        try {
+            DB::beginTransaction();
+            $up = Inventario::find($request->id);
+            if($up){
+                $up->delete();
+            }
+
+
+            DB::commit();
+            return response()->json($up, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '.$th], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
