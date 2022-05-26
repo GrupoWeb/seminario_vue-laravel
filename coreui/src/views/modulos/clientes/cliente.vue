@@ -3,7 +3,7 @@
         <CCol col="12" xl="12">
             <CCard>
                 <CCardHeader color="primary" textColor="white">
-                    Proveedores
+                    Clientes
                 </CCardHeader>
                 <CCardBody>
                     <CButton color="primary" class="m-2"  @click="show">Añadir</CButton>
@@ -71,7 +71,7 @@
                             </b-form-group>
                             <b-form-group
                                     id="telefono"
-                                    label="teléfono:"
+                                    label="Teléfono:"
                                     label-for="telefono"
                                     invalid-feedback="Dato Requerido"
                                     :state="form.states.phoneState"
@@ -79,13 +79,13 @@
                                     <b-form-input v-model="form.phone" placeholder="Ingrese Teléfono" required></b-form-input>
                             </b-form-group>
                             <b-form-group
-                                    id="Contacto"
-                                    label="Contacto:"
-                                    label-for="Contacto"
+                                    id="correo"
+                                    label="Correo:"
+                                    label-for="correo"
                                     invalid-feedback="Dato Requerido"
                                     :state="form.states.contactState"
                                     >
-                                    <b-form-input v-model="form.contact" placeholder="Ingrese Contacto" required></b-form-input>
+                                    <b-form-input v-model="form.contact" placeholder="Ingrese Correo" required></b-form-input>
                             </b-form-group>
                         </div>
                     </b-form>
@@ -126,7 +126,7 @@ import { router } from '../../../utils/router'
                             { key: 'nit' , label: "Nit" },
                             { key: 'name' , label: "Descripción" },
                             { key: 'address' , label: "Dirección" },
-                            { key: 'contact' , label: "Contacto" },
+                            { key: 'correo' , label: "Email" },
                             'editar',
                             'eliminar'
                             ]
@@ -135,7 +135,7 @@ import { router } from '../../../utils/router'
                 modal: {
                     getter: {
                         show: false,
-                        title: 'Nuevo Proveedor',
+                        title: 'Nuevo Cliente',
                         id: 'tipoPago',
                         ref: 'tipoPago',
                         header: {
@@ -179,6 +179,7 @@ import { router } from '../../../utils/router'
                     this.form.name = response.data.value.nombre 
                     this.form.address = response.data.value.direccion 
                     this.form.phone = response.data.value.telefono 
+                    this.form.contact = response.data.value.correo 
                 })
             },
             show(){
@@ -186,7 +187,7 @@ import { router } from '../../../utils/router'
                 
             },
             getTipos(){
-                axios.get(router[1].get.getProveedores + this.token)
+                axios.get(router[1].get.getClientes + this.token)
                 .then(response => {
                     this.table.response.item = response.data
                 })
@@ -227,7 +228,7 @@ import { router } from '../../../utils/router'
                     return
                 }
 
-                axios.post(router[1].post.setProveedores + this.token,{
+                axios.post(router[1].post.setClientes + this.token,{
                     nombre: this.form.name,
                     nit: this.form.nit,
                     direccion: this.form.address,
@@ -269,7 +270,7 @@ import { router } from '../../../utils/router'
             edit(id){
                 this.flag = !this.flag
 
-                axios.post(router[1].post.getProveedoresById + this.token, {
+                axios.post(router[1].post.getClienteById + this.token, {
                     id: id
                 })
                 .then(response => {
@@ -278,12 +279,12 @@ import { router } from '../../../utils/router'
                     this.form.nit = response.data[0].nit
                     this.form.address = response.data[0].address
                     this.form.phone = response.data[0].phone
-                    this.form.contact = response.data[0].contact
+                    this.form.contact = response.data[0].correo
                 })
                 this.show()
             },
             deleted(id){
-                axios.put(router[1].put.deleteProveedores + this.token,{
+                axios.put(router[1].put.deleteClientes + this.token,{
                     id: id
                 })
                 .then(response => {

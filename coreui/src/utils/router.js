@@ -15,7 +15,8 @@ export const router = [
             getMedida: 'api/getMedida',
             getStringCorrelativo: 'api/getStringCorrelativo',
             sat: 'https://dev.mineco.gob.gt/web-quejaini/rs/proveedores/aprobar?nit=',
-            getProveedores: 'api/getProveedores'
+            getProveedores: 'api/getProveedores',
+            getClientes: 'api/getClientes',
         },
         post: {
             departamentById: 'api/departamentoById',
@@ -48,6 +49,8 @@ export const router = [
             getDataById: 'api/getDataById',
             setProveedores: 'api/setProveedores',
             getProveedoresById: 'api/getProveedoresById',
+            setClientes: 'api/setClientes',
+            getClienteById: 'api/getClienteById',
         },
         
         put: {
@@ -65,6 +68,7 @@ export const router = [
             getDeleteDataById: 'api/getDeleteDataById',
             updateProveedores: 'api/updateProveedores',
             deleteProveedores: 'api/deleteProveedores',
+            deleteClientes: 'api/deleteClientes',
         }
     }
 ]

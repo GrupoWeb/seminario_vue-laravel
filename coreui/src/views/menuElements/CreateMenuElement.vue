@@ -54,15 +54,9 @@
               </CSelect>
             </div>
             <div v-if="divIcon">
-              Icon - Find icon class in: 
-              <a 
-                href="https://coreui.io/docs/icons/icons-list/#coreui-icons-free-502-icons"
-                target="_blank"
-              >
-                CoreUI icons documentation
-              </a>
+              Icon 
               <br>
-              <CInput type="text" placeholder="CoreUI Icon class - example: cil-bell" v-model="menuelement.icon"></CInput>
+              <CInput type="text" placeholder="Icon class - example: cil-bell" v-model="menuelement.icon"></CInput>
             </div>
           <CButton color="primary" @click="store()">Create</CButton>
           <CButton color="primary" @click="goBack">Back</CButton>

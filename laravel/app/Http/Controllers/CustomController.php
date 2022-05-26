@@ -21,6 +21,7 @@ use App\Models\Linea;
 use App\Models\Transmisiones;
 use App\Models\TipoVehiculo;
 use App\Models\Proveedores;
+use App\Models\Clientes;
 use Carbon\Carbon;
 
 class CustomController extends Controller
@@ -770,6 +771,8 @@ class CustomController extends Controller
         );
     }
 
+
+
     public function getProveedoresById(Request $request){
         return response()->json(
             Proveedores::selectRaw('id as value, nombre as name, nit, direccion as address, telefono as phone, contacto as contact')
@@ -811,6 +814,75 @@ class CustomController extends Controller
             DB::beginTransaction();
             
             $prov = Proveedores::find($request->id);
+
+            if($prov){
+                $prov->delete();
+            }
+
+            DB::commit();
+
+            return response()->json($prov, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getClientes(){
+        return response()->json(
+            Clientes::selectRaw('id as value, nombre as name, nit, direccion as address, telefono as phone, email as correo')
+            ->whereNull('deleted_at')->get(),
+            Response::HTTP_OK
+        );
+    }
+
+
+    public function setClientes(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $flag = Clientes::where(['nit'   =>  $request->nit])->whereNull('deleted_at')->exists();
+
+            if(!$flag){
+                $prov = Clientes::create([
+                    'nombre'        =>  $request->nombre,
+                    'nit'           =>  $request->nit,
+                    'direccion'     =>  $request->direccion,
+                    'telefono'      =>  $request->telefono,
+                    'email'         =>  $request->contacto
+                ]);
+                DB::commit();
+    
+                return response()->json($prov, Response::HTTP_OK);
+            }else{
+                return response()->json(false, Response::HTTP_NO_CONTENT);
+            }
+
+
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function getClienteById(Request $request){
+        return response()->json(
+            Clientes::selectRaw('id as value, nombre as name, nit, direccion as address, telefono as phone, email as correo')
+            ->whereNull('deleted_at')
+            ->where(['id'   =>  $request->id])->get(),
+            Response::HTTP_OK
+        );
+    }
+
+    public function deleteClientes(Request $request){
+        try {
+            DB::beginTransaction();
+            
+            $prov = Clientes::find($request->id);
 
             if($prov){
                 $prov->delete();

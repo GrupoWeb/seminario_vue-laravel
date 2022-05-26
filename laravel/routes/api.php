@@ -91,6 +91,11 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::put('updateProveedores','CustomController@updateProveedores');
     Route::put('deleteProveedores','CustomController@deleteProveedores');
 
+    Route::get('getClientes','CustomController@getClientes');
+    Route::post('setClientes','CustomController@setClientes');
+    Route::post('getClienteById','CustomController@getClienteById');
+    Route::put('deleteClientes','CustomController@deleteClientes');
+
 
     /*********************************** */
 

@@ -118,6 +118,7 @@ const Correlativos = () => import('@/views/modulos/stringCorrelativos/formato-co
 const catalogoVehiculo = () => import('@/views/modulos/vehiculos/catalogos');
 const Productos = () => import('@/views/modulos/productos/producto');
 const Proveedor = () => import('@/views/modulos/proveedores/proveedor');
+const Cliente = () => import('@/views/modulos/clientes/cliente');
 
 
 Vue.use(Router)
@@ -418,6 +419,19 @@ function configRoutes () {
             {
               path: '',
               component: Proveedor,
+            }
+          ]
+        },
+        {
+          path: 'cliente',
+          meta: { label: 'Módulo de Clientes' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Cliente,
             }
           ]
         },
