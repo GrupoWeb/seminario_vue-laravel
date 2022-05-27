@@ -17,6 +17,7 @@ class CreateUserHasRolesTable extends Migration
             $table->bigIncrements('id');
             $table->integer('role_id')->unsigned();
             $table->integer('users_id')->unsigned();
+            $table->integer('empresa_id')->unsigned();
             $table->timestamps();
         });
     }

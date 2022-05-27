@@ -10,6 +10,18 @@ use Spatie\Permission\Models\Role;
 use App\Models\User;
 use App\Models\userHasRoles;
 use App\Models\RoleHierarchy;
+use App\Models\Empresa;
+use App\Models\Sede;
+use App\Models\TipoPago;
+use App\Models\TiposGasto;
+use App\Models\Medida;
+use App\Models\Productos;
+use App\Models\StringCorrelativo;
+use App\Models\Marca;
+use App\Models\Linea;
+use App\Models\Transmisiones;
+use App\Models\TipoVehiculo;
+
 
 class UsersAndNotesSeeder extends Seeder
 {
@@ -79,6 +91,16 @@ class UsersAndNotesSeeder extends Seeder
             ],
         ];
 
+
+        Empresa::create(['nombre'    =>  'TransPort Extracción']);
+        Empresa::create(['nombre'    =>  'TransPort Planta']);
+        Empresa::create(['nombre'    =>  'TransPort Alquiler']);
+        Empresa::create(['nombre'    =>  'TransPort Cemex']);
+        Empresa::create(['nombre'    =>  'Multi TrnasPort']);
+        Empresa::create(['nombre'    =>  'TransPort Contructora']);
+
+
+
         /* Create roles */
         $adminRole = $roleAdmin = Role::create(['name' => 'admin']);
         RoleHierarchy::create([
@@ -131,6 +153,7 @@ class UsersAndNotesSeeder extends Seeder
         /*  insert users   */
         $user = User::create([ 
             'name' => 'admin',
+            'fullName'  =>  'Administrador',
             'email' => 'admin@admin.com',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -142,12 +165,14 @@ class UsersAndNotesSeeder extends Seeder
         $user->assignRole($roleAdmin);
         userHasRoles::create([
             'role_id'   =>  $adminRole->id,
-            'users_id'  =>  $user->id
+            'users_id'  =>  $user->id,
+            'empresa_id'    =>  1
         ]);
-        userHasRoles::create([
-            'role_id'   =>  $userRole->id,
-            'users_id'  =>  $user->id
-        ]);
+        // userHasRoles::create([
+        //     'role_id'   =>  $userRole->id,
+        //     'users_id'  =>  $user->id,
+        //     'empresa_id'    =>  2
+        // ]);
 
 
 
@@ -155,6 +180,7 @@ class UsersAndNotesSeeder extends Seeder
 
         $user2 = User::create([ 
             'name' => 'jjolon',
+            'fullName'  =>  'Juan José Jolón Granados',
             'email' => 'jjolon@miumg.edu.gt',
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -165,11 +191,53 @@ class UsersAndNotesSeeder extends Seeder
         $user2->assignRole($roleAdmin);
         userHasRoles::create([
             'role_id'   =>  $adminRole->id,
-            'users_id'  =>  $user2->id
+            'users_id'  =>  $user2->id,
+            'empresa_id'    =>  2
         ]);
-        userHasRoles::create([
-            'role_id'   =>  $userRole->id,
-            'users_id'  =>  $user2->id
+        // userHasRoles::create([
+        //     'role_id'   =>  $userRole->id,
+        //     'users_id'  =>  $user2->id,
+        //     'empresa_id'    =>  2
+        // ]);
+
+
+
+        
+        Sede::create([
+          'nombre'          =>  'Sede 1',
+          'telefono'        =>  '5534-9970',
+          'direccion'       =>  ' 1 av. 5-89 zona 8',
+          'departamentos_id' =>  1,
+          'municipio_id'    =>  1  
         ]);
+
+        Sede::create([
+          'nombre'          =>  'Sede 2',
+          'telefono'        =>  '5534-9970',
+          'direccion'       =>  ' 1 av. 5-89 zona 18',
+          'departamentos_id' =>  1,
+          'municipio_id'    =>  1  
+        ]);
+
+        TipoPago::create(['descripcion' =>  'Efectivo']);
+        TipoPago::create(['descripcion' =>  'Credito']);
+        TiposGasto::create(['descripcion' =>  'Pago clientes']);
+        TiposGasto::create(['descripcion' =>  'Pago de planilla']);
+        Medida::create(['nombre' =>  'Litro', 'status_id'  =>  1]);
+        Medida::create(['nombre' =>  'Galon', 'status_id'   =>  1]);
+        Productos::create(['nombre' =>  'Material de contrucción']);
+        Productos::create(['nombre' =>  'Transpporte de material']);
+        StringCorrelativo::create(['correlativo' =>  'EMPRESA_1_']);
+        StringCorrelativo::create(['correlativo' =>  'EMPRESA_2_']);
+
+
+        Marca::create(['nombre' =>  'BMW']);
+        Marca::create(['nombre' =>  'HONDA']);
+        Linea::create(['nombre' =>  'I3']);
+        Linea::create(['nombre' =>  'HR-V']);
+        Transmisiones::create(['nombre' =>  'AUTOMATICA']);
+        Transmisiones::create(['nombre' =>  'MANUAL']);
+        TipoVehiculo::create(['nombre' =>  'SEDAN']);
+        TipoVehiculo::create(['nombre' =>  'SUV']);
     }
 }

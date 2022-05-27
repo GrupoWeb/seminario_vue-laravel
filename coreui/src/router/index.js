@@ -120,6 +120,7 @@ const Productos = () => import('@/views/modulos/productos/producto');
 const Proveedor = () => import('@/views/modulos/proveedores/proveedor');
 const Cliente = () => import('@/views/modulos/clientes/cliente');
 const Inventario = () => import('@/views/modulos/inventarios/inventario');
+const Requisicion = () => import('@/views/modulos/requisiciones/requisicion');
 
 
 Vue.use(Router)
@@ -446,6 +447,19 @@ function configRoutes () {
             {
               path: '',
               component: Inventario,
+            }
+          ]
+        },
+        {
+          path: 'requisiciones',
+          meta: { label: 'Módulo de Requisición' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Requisicion,
             }
           ]
         },

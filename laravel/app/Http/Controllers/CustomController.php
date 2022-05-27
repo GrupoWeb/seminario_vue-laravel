@@ -911,7 +911,7 @@ class CustomController extends Controller
     }
 
     public function getSucursal(){
-        return response()->json(SedeEmpresa::selectRaw('sede_empresas.id as value, sedes.nombre as text')
+        return response()->json(SedeEmpresa::selectRaw('sede_empresas.id as value, concat(sedes.nombre,"-",empresas.nombre) as text')
         ->join('sedes', 'sedes.id','=','sede_empresas.sede_id')
         ->join('empresas','empresas.id','=','sede_empresas.empresa_id')
         ->whereNull('sede_empresas.deleted_at')->get(),Response::HTTP_OK);
