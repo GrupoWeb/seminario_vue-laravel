@@ -24,6 +24,9 @@ use App\Models\Proveedores;
 use App\Models\Clientes;
 use App\Models\Productos;
 use App\Models\Inventario;
+use App\Models\userHasRoles;
+use App\Models\RequisicionesEnc;
+use App\Models\RequisicionesDet;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -920,7 +923,7 @@ class CustomController extends Controller
     public function setInventario(Request $request){
         
         $request->validate([
-            'files'  =>  'required|mimes:jpeg,bmp,png|max:500'
+            'files'  =>  'required|mimes:jpeg,bmp,png|max:5000'
         ]);
 
         try {
@@ -999,6 +1002,200 @@ class CustomController extends Controller
             throw $th;
             DB::rollBack();
             return response()->json(['error '.$th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function listProductosInventario(){
+        $empresa =  userHasRoles::selectRaw('i.id as value, concat(p.nombre," - ", m.nombre) as text')
+                    ->where(['user_has_roles.users_id'   => Auth::user()->id])
+                    ->join('sede_empresas as a','a.empresa_id','=','user_has_roles.empresa_id')
+                    ->join('inventarios as i','i.sede_empresa_id','=','a.id')
+                    ->join('productos as p','p.id','=','i.producto_id')
+                    ->join('medidas as m','m.id','=','i.medida_id')
+                    ->get();
+
+        return $empresa;
+    }
+
+    public function findProducto(Request $request){
+
+        $producto = Inventario::select('producto_id')->where(['id'  => $request->id])->get();
+
+        return response()->json(
+            Productos::select('nombre')->where(['id'    => $producto[0]['producto_id']])->get()
+            ,Response::HTTP_OK);
+    }
+
+    public function setRequisicion(Request $request){
+
+        try {
+            DB::beginTransaction();
+
+            $req = RequisicionesEnc::create([
+                'usuario_creo'          =>  Auth::user()->id,
+                'fecha_creo'           =>  Carbon::now()->format("Y-m-d"),
+                'estado_requisicion'    =>  3,
+                'observaciones'         =>  $request->obs
+            ]);
+
+            foreach ($request->data as $key => $value) {
+                RequisicionesDet::create([
+                    'requisiciones_encs_id'     =>  $req->id,
+                    'inventario_id'             =>  $value['key'],
+                    'cantidad_solicitada'       =>  $value['cantidad']
+                ]);
+            }
+
+            DB::commit();
+
+            return response()->json($req,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' .$th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function cargarMisRequisiciones(){
+        return response()->json(
+            RequisicionesEnc::selectRaw('requisiciones_encs.id as code, requisiciones_encs.observaciones as observacion, s.name as estado')
+            ->join('status as s','s.id','=','requisiciones_encs.estado_requisicion')
+            ->where(['usuario_creo' =>  Auth::user()->id])->get()
+            ,Response::HTTP_OK);
+    }
+
+    public function cargarrequisicionesAprobar(){
+        return response()->json(
+            RequisicionesEnc::selectRaw('requisiciones_encs.id as code, requisiciones_encs.observaciones as observacion, s.name as estado, requisiciones_encs.fecha_creo as fecha')
+            ->join('status as s','s.id','=','requisiciones_encs.estado_requisicion')
+            ->where(['estado_requisicion'   =>  3])->get()
+            ,Response::HTTP_OK);
+    }
+
+    public function cargarrequisicionesAutorizar(){
+        return response()->json(
+            RequisicionesEnc::selectRaw('requisiciones_encs.id as code, requisiciones_encs.observaciones as observacion, s.name as estado, requisiciones_encs.fecha_aprobo as fecha')
+            ->join('status as s','s.id','=','requisiciones_encs.estado_requisicion')
+            ->where(['estado_requisicion'   =>  4])->get()
+            ,Response::HTTP_OK);
+    }
+    public function cargarrequisicionesDespacho(){
+        return response()->json(
+            RequisicionesEnc::selectRaw('requisiciones_encs.id as code, requisiciones_encs.observaciones as observacion, s.name as estado, requisiciones_encs.fecha_autorizo as fecha')
+            ->join('status as s','s.id','=','requisiciones_encs.estado_requisicion')
+            ->where(['estado_requisicion'   =>  5])->get()
+            ,Response::HTTP_OK);
+    }
+
+    public function RequisicionesAprobarInfo(Request $request){
+        return response()->json(
+            RequisicionesDet::selectRaw('concat(p.nombre, "-", m.nombre) as producto, requisiciones_dets.cantidad_solicitada as cantidad, t.observaciones')
+            ->join('requisiciones_encs as t','t.id','=','requisiciones_dets.requisiciones_encs_id')
+            ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
+            ->join('productos as p','p.id','=','i.producto_id')
+            ->join('medidas as m','m.id','=','i.medida_id')
+            ->where(['requisiciones_encs_id'   =>  $request->id])->get()
+            ,Response::HTTP_OK);
+    }
+
+    public function aprobarRequisicion(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $aprobar = RequisicionesEnc::find($request->id);
+            if($aprobar){
+                $aprobar->update(['estado_requisicion'  =>  4, 'usuario_aprobo'   =>  Auth::user()->id, 'fecha_aprobo'  =>  Carbon::now()->format("Y-m-d")]);
+            }
+
+            DB::commit();
+            return response()->json($aprobar,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '. $th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+
+    public function despacharRequisicionOld(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $obj = RequisicionesDet::selectRaw('inventario_id as code, cantidad_solicitada as cantidad')
+                    ->where(['requisiciones_encs_id'    =>  $request->id])->get();
+            
+            foreach ($obj as $key => $value) {
+                $inv = Inventario::select('stock')->where(['id'    =>  $value->code])->get();
+                $objCantidad = $inv[0]['stock'] - $value->cantidad;
+                Inventario::where(['id'    =>  $value->code])->update(['stock' =>  $objCantidad]);
+            }
+
+            $aprobar = RequisicionesEnc::find($request->id);
+            if($aprobar){
+                $aprobar->update(['estado_requisicion'  =>  4, 'usuario_autorizo'   =>  Auth::user()->id, 'fecha_autorizo'  =>  Carbon::now()->format("Y-m-d")]);
+            }
+            DB::commit();
+            return response()->json($aprobar,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error'  =>  true] ,Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function rechazarRequisicion(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $req = RequisicionesEnc::find($request->id);
+            if($req){
+                $req->delete();
+            }
+
+            $reqDest = RequisicionesDet::where(['requisiciones_encs_id' =>  $request->id])->update(['deleted_at'    =>  Carbon::now()]);
+
+            DB::commit();
+            return response()->json($reqDest, Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function autorizarRequisicion(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $aprobar = RequisicionesEnc::find($request->id);
+            if($aprobar){
+                $aprobar->update(['estado_requisicion'  =>  5, 'usuario_autorizo'   =>  Auth::user()->id, 'fecha_autorizo'  =>  Carbon::now()->format("Y-m-d")]);
+            }
+
+            DB::commit();
+            return response()->json($aprobar,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '. $th],Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function despacharRequisicion(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $aprobar = RequisicionesEnc::find($request->id);
+            if($aprobar){
+                $aprobar->update(['estado_requisicion'  =>  6, 'usuario_despacho'   =>  Auth::user()->id, 'fecha_despacho'  =>  Carbon::now()->format("Y-m-d")]);
+            }
+
+            DB::commit();
+            return response()->json($aprobar,Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+            return response()->json(['error '. $th],Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

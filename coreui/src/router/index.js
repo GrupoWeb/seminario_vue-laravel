@@ -121,6 +121,9 @@ const Proveedor = () => import('@/views/modulos/proveedores/proveedor');
 const Cliente = () => import('@/views/modulos/clientes/cliente');
 const Inventario = () => import('@/views/modulos/inventarios/inventario');
 const Requisicion = () => import('@/views/modulos/requisiciones/requisicion');
+const Aprobacion = () => import('@/views/modulos/requisiciones/aprobacion');
+const Autorizado = () => import('@/views/modulos/requisiciones/autorizado');
+const Despachado = () => import('@/views/modulos/requisiciones/despachado');
 
 
 Vue.use(Router)
@@ -460,6 +463,45 @@ function configRoutes () {
             {
               path: '',
               component: Requisicion,
+            }
+          ]
+        },
+        {
+          path: 'aprobacion',
+          meta: { label: 'Módulo de Aprobaciones Requisición' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Aprobacion,
+            }
+          ]
+        },
+        {
+          path: 'autorizacion',
+          meta: { label: 'Módulo de Autorización' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Autorizado,
+            }
+          ]
+        },
+        {
+          path: 'despacho',
+          meta: { label: 'Módulo de Despacho' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Despachado,
             }
           ]
         },

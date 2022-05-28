@@ -143,9 +143,26 @@ class UsersAndNotesSeeder extends Seeder
 
 
         array_push($statusIds, DB::getPdo()->lastInsertId());
+
         DB::table('status')->insert([
             'name' => 'Inactivo',
             'class' => 'secondary',
+        ]);
+        DB::table('status')->insert([
+            'name' => 'Solicitado',
+            'class' => 'primary',
+        ]);
+        DB::table('status')->insert([
+            'name' => 'Aprobado',
+            'class' => 'primary',
+        ]);
+        DB::table('status')->insert([
+            'name' => 'Autorizado',
+            'class' => 'primary',
+        ]);
+        DB::table('status')->insert([
+            'name' => 'Despachado',
+            'class' => 'primary',
         ]);
 
 
@@ -223,18 +240,38 @@ class UsersAndNotesSeeder extends Seeder
         TipoPago::create(['descripcion' =>  'Credito']);
         TiposGasto::create(['descripcion' =>  'Pago clientes']);
         TiposGasto::create(['descripcion' =>  'Pago de planilla']);
+
         Medida::create(['nombre' =>  'Litro', 'status_id'  =>  1]);
         Medida::create(['nombre' =>  'Galon', 'status_id'   =>  1]);
-        Productos::create(['nombre' =>  'Material de contrucción']);
-        Productos::create(['nombre' =>  'Transpporte de material']);
+        Medida::create(['nombre' =>  'Libra', 'status_id'  =>  1]);
+        Medida::create(['nombre' =>  'Tonelada', 'status_id'   =>  1]);
+        Medida::create(['nombre' =>  'Unidad', 'status_id'  =>  1]);
+        Medida::create(['nombre' =>  'Docena', 'status_id'   =>  1]);
+
+        Productos::create(['nombre' =>  'Cobre']);
+        Productos::create(['nombre' =>  'Oro']);
+        Productos::create(['nombre' =>  'Plata']);
+        Productos::create(['nombre' =>  'Aluminio']);
+        Productos::create(['nombre' =>  'Arcilla']);
+        Productos::create(['nombre' =>  'Cuarzo']);
+        Productos::create(['nombre' =>  'Zafiro']);
+        Productos::create(['nombre' =>  'Esmeralda']);
+        Productos::create(['nombre' =>  'Granito']);
+        Productos::create(['nombre' =>  'Mármol']);
+        Productos::create(['nombre' =>  'Mica']);
+
+
+
         StringCorrelativo::create(['correlativo' =>  'EMPRESA_1_']);
         StringCorrelativo::create(['correlativo' =>  'EMPRESA_2_']);
+        StringCorrelativo::create(['correlativo' =>  'REQUISICION-EMP-']);
 
 
         Marca::create(['nombre' =>  'BMW']);
         Marca::create(['nombre' =>  'HONDA']);
         Linea::create(['nombre' =>  'I3']);
         Linea::create(['nombre' =>  'HR-V']);
+
         Transmisiones::create(['nombre' =>  'AUTOMATICA']);
         Transmisiones::create(['nombre' =>  'MANUAL']);
         TipoVehiculo::create(['nombre' =>  'SEDAN']);

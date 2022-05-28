@@ -105,6 +105,20 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::put('updateStock','CustomController@updateStock');
     Route::put('deleteStock','CustomController@deleteStock');
 
+    Route::get('listProductosInventario','CustomController@listProductosInventario');
+    Route::post('findProducto','CustomController@findProducto');
+    Route::post('setRequisicion','CustomController@setRequisicion');
+    Route::get('cargarMisRequisiciones','CustomController@cargarMisRequisiciones');
+    Route::get('cargarrequisicionesAprobar','CustomController@cargarrequisicionesAprobar');
+    Route::post('RequisicionesAprobarInfo','CustomController@RequisicionesAprobarInfo');
+    Route::post('aprobarRequisicion','CustomController@aprobarRequisicion');
+    Route::put('rechazarRequisicion','CustomController@rechazarRequisicion');
+
+    Route::get('cargarrequisicionesAutorizar','CustomController@cargarrequisicionesAutorizar');
+    Route::get('cargarrequisicionesDespacho','CustomController@cargarrequisicionesDespacho');
+    Route::post('autorizarRequisicion','CustomController@autorizarRequisicion');
+    Route::post('despacharRequisicion','CustomController@despacharRequisicion');
+
 
     /*********************************** */
 

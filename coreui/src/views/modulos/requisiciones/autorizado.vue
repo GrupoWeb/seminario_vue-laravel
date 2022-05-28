@@ -3,20 +3,19 @@
         <CCol col="12" xl="12">
             <CCard>
                 <CCardHeader color="primary" textColor="white">
-                    Requisiciones
+                    Requisiciones para Autorizar
                 </CCardHeader>
                 <CCardBody>
-                    <CButton color="primary" class="m-2"  @click="show">Nueva Requisición</CButton>
                     <CDataTable hover striped border :items="table.response.item" :fields="table.response.fields" :items-per-page="10" pagination
                         :noItemsView='{ noResults: "no se encontro ningun dato", noItems: "Sin datos para mostrar" }'>
-                            <template #Cargar="{item}">
+                            <template #Autorizar="{item}">
                                 <td>
-                                   <CButton color="primary" @click="edit( item.value, item.stock )">Cargar</CButton> 
+                                   <CButton color="primary" @click="edit( item.code )">Ver</CButton> 
                                 </td>
                             </template>
-                            <template #eliminar="{item}">
+                            <template #rechazar="{item}">
                                 <td>
-                                   <CButton color="danger" @click="deleted( item.value )">Eliminar</CButton>
+                                   <CButton color="danger" @click="deleted( item.code )">Rechazar</CButton>
                                 </td>
                             </template>
                     </CDataTable>
@@ -43,52 +42,10 @@
                                     label="Observación:"
                                     label-for="text_obervacion"
                                 >
-                                    <b-form-textarea
-                                        id="Observaciones"
-                                        v-model="form.obs"
-                                        placeholder="Ingrese una observación"
-                                        rows="3"
-                                        max-rows="6"
-                                        ></b-form-textarea>
+                                {{ form.obs }}
                                 </b-form-group>
                             </CCol>
                         </CRow>
-                        <CRow>
-                            <CCol sm="6">
-                                <b-form-group
-                                    id="producto"
-                                    label="Producto:"
-                                    label-for="producto_id"
-                                    invalid-feedback="Seleccione un registro"
-                                >
-                                    <b-form-select
-                                        id="producto"
-                                        v-model="form.producto_id"
-                                        :options="options.option_product"
-                                        :state="validate($v.form.producto_id)"
-                                    ></b-form-select>
-                                </b-form-group>
-                            </CCol>
-                            <CCol sm="6">
-                                <b-form-group
-                                    id="cantidad"
-                                    label="Cantidad:"
-                                    label-for="cantidad_id"
-                                    invalid-feedback="Ingrese un Dato"
-                                >
-                                    <b-form-input id="stock" type="number" v-model="form.cantidad" :state="validate($v.form.cantidad)"></b-form-input>
-                                </b-form-group>
-                            </CCol>
-                        </CRow>
-                        <CRow>
-                            <CCol>
-                                <b-button :disabled="button.loading" @click="addRow">
-                                    <b-spinner small v-if="button.loading"></b-spinner>
-                                    Añadir
-                                </b-button>
-                            </CCol>
-                        </CRow>
-
                     </b-form>
 
                     <b-table class="mt-2" striped hover :items="table.pedido.items" :fields="table.pedido.fields"></b-table>
@@ -99,52 +56,13 @@
                         </b-button>
                         <b-button size="sm" variant="success" @click="ok()" v-if="!flag" :disabled="button.loading">
                             <b-spinner small v-if="button.loading"></b-spinner>
-                            Guardar
+                            Autorizar
                         </b-button>
                         <b-button size="sm" variant="success" @click="update()" v-else>
                             Actualizar
                         </b-button>
                     </template>
             </b-modal>
-
-            
-
-            <!-- <b-modal
-                size="sm"
-                @hidden="resetModal"
-                @ok="handleOkUpload"
-                v-model="modal.cargar.show"
-                :title="modal.cargar.title"
-                :id="modal.cargar.id"
-                :ref="modal.cargar.ref"
-                :header-bg-variant="modal.cargar.header.color"
-                :header-text-variant="modal.cargar.header.text"
-                :footer-bg-variant="modal.cargar.footer.color"
-                >
-
-                <b-form ref="formCarga" @submit.stop.prevent="handleSubmit">
-                    <CRow>
-                        <b-form-group
-                            id="stock"
-                            label="Stock:"
-                            label-for="stock"
-                            invalid-feedback="Ingrese un dato"
-                        >
-                            <b-form-input id="stock" type="number" v-model="form.stock" ></b-form-input>
-                        </b-form-group>
-                    </CRow>
-                </b-form>
-                    <template #modal-footer="{ ok, cancel}">
-                        <b-button size="sm" variant="danger" @click="cancel()">
-                            Cancelar
-                        </b-button>
-                        <b-button size="sm" variant="success" @click="ok()" :disabled="button.loading">
-                            <b-spinner small v-if="button.loading"></b-spinner>
-                            Guardar
-                        </b-button>
-                    </template>
-
-            </b-modal> -->
         </CCol>
     </CRow>
 </template>
@@ -185,7 +103,10 @@ import { required, minLength } from "vuelidate/lib/validators"
                         fields: [
                             { key: 'code' , label: "Id" },
                             { key: 'observacion' , label: "Observacion Requisición" },
-                            { key: 'estado' , label: "estado" }
+                            { key: 'estado' , label: "estado" },
+                            { key: 'fecha' , label: "Fecha Aprobado" },
+                            'Autorizar',
+                            'rechazar'
                             ]
                     }
                 },
@@ -205,7 +126,7 @@ import { required, minLength } from "vuelidate/lib/validators"
                     },
                     cargar: {
                         show: false,
-                        title: 'Aprobar Solicitud',
+                        title: 'Cargar Stock',
                         id: 'cargaF',
                         ref: 'cargaF',
                         header: {
@@ -265,14 +186,11 @@ import { required, minLength } from "vuelidate/lib/validators"
             },
             getInfo(){
                 const requestProduct = axios.get(router[1].get.listProductosInventario + this.token)
-                const requestRequisiciones = axios.get(router[1].get.cargarMisRequisiciones + this.token)
-                // const requestProv = axios.get(router[1].get.getProveedores + this.token)
-                // const requestSucursal = axios.get(router[1].get.getSucursal + this.token)
-                // const requestInventario = axios.get(router[1].get.getInventario + this.token)
+                const requestRequisiciones = axios.get(router[1].get.cargarrequisicionesAutorizar + this.token)
                 
-                axios.all([requestProduct, requestRequisiciones])
-                .then(axios.spread((responseProducto, responseRequisiciones) => {
-                    this.options.option_product = responseProducto.data
+                axios.all([requestRequisiciones])
+                .then(axios.spread((responseRequisiciones) => {
+                    // this.options.option_product = responseProducto.data
                     this.table.response.item  = responseRequisiciones.data
                     // this.options.option_proveedor  = responseProv.data
                     // this.options.option_sucursal  = responseSucursal.data
@@ -337,9 +255,8 @@ import { required, minLength } from "vuelidate/lib/validators"
                 
             },
             handleSubmit(){
-                axios.post(router[1].post.setRequisicion + this.token,{
-                    obs: this.form.obs,
-                    data: this.table.pedido.items
+                axios.post(router[1].post.autorizarRequisicion + this.token,{
+                    id: this.form.id
                 })
                 .then(response => {
                     if(response.status == 200){
@@ -373,14 +290,20 @@ import { required, minLength } from "vuelidate/lib/validators"
                     timer: 2500
                 })
             },
-            edit(id, stock){
-                this.modal.cargar.show = !this.modal.cargar.show
+            edit(id){
+                
+                axios.post(router[1].post.RequisicionesAprobarInfo + this.token,{ id: id})
+                .then(response => {
+                    this.table.pedido.items = response.data
+                    this.form.obs = response.data[0].observaciones
+
+                })
+                this.modal.getter.show = !this.modal.getter.show
                 this.form.id = id
-                this.form.update = stock
 
             },
             deleted(id){
-                axios.put(router[1].put.deleteStock + this.token,{
+                axios.put(router[1].put.rechazarRequisicion + this.token,{
                     id: id
                 })
                 .then(response => {

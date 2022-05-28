@@ -15,10 +15,10 @@ class CreateRequisicionesDetsTable extends Migration
     {
         Schema::create('requisiciones_dets', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('requisiciones_encs_id')->constrained();
-            $table->foreignId('inventario_id')->constrained();
-            $table->integer('cantidad_solicitada');
-            $table->integer('cantidad_autorizada');
+            $table->foreignId('requisiciones_encs_id')->constrained()->nullable();;
+            $table->foreignId('inventario_id')->constrained()->nullable();;
+            $table->integer('cantidad_solicitada')->nullable();;
+            $table->integer('cantidad_autorizada')->nullable();;
             $table->timestamps();
 
             $table->softDeletes();

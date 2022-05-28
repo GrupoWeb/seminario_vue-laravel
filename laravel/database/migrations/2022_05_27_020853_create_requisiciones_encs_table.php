@@ -15,16 +15,16 @@ class CreateRequisicionesEncsTable extends Migration
     {
         Schema::create('requisiciones_encs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('usuario_creo')->unsigned();
-            $table->date('fecha_creo');
-            $table->bigInteger('usuario_autorizo')->unsigned();
-            $table->date('fecha_autorizo');
-            $table->bigInteger('usuario_aprobo')->unsigned();
-            $table->date('fecha_aprobo');
-            $table->bigInteger('estado_requisicion')->unsigned();
-            $table->bigInteger('usuario_despacho')->unsigned();
-            $table->date('fecha_despacho');
-            $table->text('observaciones');
+            $table->bigInteger('usuario_creo')->unsigned()->nullable();;
+            $table->date('fecha_creo')->nullable();;
+            $table->bigInteger('usuario_autorizo')->unsigned()->nullable();;
+            $table->date('fecha_autorizo')->nullable();;
+            $table->bigInteger('usuario_aprobo')->unsigned()->nullable();;
+            $table->date('fecha_aprobo')->nullable();;
+            $table->bigInteger('estado_requisicion')->unsigned()->nullable();;
+            $table->bigInteger('usuario_despacho')->unsigned()->nullable();;
+            $table->date('fecha_despacho')->nullable();;
+            $table->text('observaciones')->nullable();;
             $table->timestamps();
 
             $table->softDeletes();
