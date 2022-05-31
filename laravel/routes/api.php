@@ -119,6 +119,11 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('autorizarRequisicion','CustomController@autorizarRequisicion');
     Route::post('despacharRequisicion','CustomController@despacharRequisicion');
 
+    Route::post('pdf','CustomController@pdfDespacho');
+    Route::get('generateCorrelativo','CustomController@generateCorrelativo');
+    Route::get('getString','CustomController@getString');
+    Route::post('cargarItems','CustomController@cargarItems');
+
 
     /*********************************** */
 

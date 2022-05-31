@@ -124,6 +124,7 @@ const Requisicion = () => import('@/views/modulos/requisiciones/requisicion');
 const Aprobacion = () => import('@/views/modulos/requisiciones/aprobacion');
 const Autorizado = () => import('@/views/modulos/requisiciones/autorizado');
 const Despachado = () => import('@/views/modulos/requisiciones/despachado');
+const Factura = () => import('@/views/modulos/facturacion/factura');
 
 
 Vue.use(Router)
@@ -502,6 +503,19 @@ function configRoutes () {
             {
               path: '',
               component: Despachado,
+            }
+          ]
+        },
+        {
+          path: 'factura',
+          meta: { label: 'Módulo de Factura' },
+          component: {
+            render (c) { return c('router-view') }
+          },
+          children: [
+            {
+              path: '',
+              component: Factura,
             }
           ]
         },

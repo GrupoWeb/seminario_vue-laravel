@@ -9,14 +9,9 @@
                     <CButton color="primary" class="m-2"  @click="show">Nueva Requisición</CButton>
                     <CDataTable hover striped border :items="table.response.item" :fields="table.response.fields" :items-per-page="10" pagination
                         :noItemsView='{ noResults: "no se encontro ningun dato", noItems: "Sin datos para mostrar" }'>
-                            <template #Cargar="{item}">
+                            <template #Imprimir="{item}">
                                 <td>
-                                   <CButton color="primary" @click="edit( item.value, item.stock )">Cargar</CButton> 
-                                </td>
-                            </template>
-                            <template #eliminar="{item}">
-                                <td>
-                                   <CButton color="danger" @click="deleted( item.value )">Eliminar</CButton>
+                                   <CButton color="primary" @click="imprimir( item.code, item.correlativo )" v-if="item.estado === 'Despachado'">Imprimir</CButton>
                                 </td>
                             </template>
                     </CDataTable>
@@ -50,6 +45,23 @@
                                         rows="3"
                                         max-rows="6"
                                         ></b-form-textarea>
+                                </b-form-group>
+                            </CCol>
+                        </CRow>
+                        <CRow>
+                            <CCol sm="12">
+                                <b-form-group
+                                    id="correlativo"
+                                    label="Correlativo:"
+                                    label-for="strring_id"
+                                    invalid-feedback="Seleccione un registro"
+                                >
+                                    <b-form-select
+                                        id="producto"
+                                        v-model="form.string_id"
+                                        :options="options.option_string "
+                                        :state="validate($v.form.string_id)"
+                                    ></b-form-select>
                                 </b-form-group>
                             </CCol>
                         </CRow>
@@ -171,6 +183,7 @@ import { required, minLength } from "vuelidate/lib/validators"
                     option_medida: [],
                     option_proveedor: [],
                     option_sucursal: [],
+                    option_string: [],
                 },
                 table: {
                     pedido: {
@@ -185,7 +198,8 @@ import { required, minLength } from "vuelidate/lib/validators"
                         fields: [
                             { key: 'code' , label: "Id" },
                             { key: 'observacion' , label: "Observacion Requisición" },
-                            { key: 'estado' , label: "estado" }
+                            { key: 'estado' , label: "estado" },
+                            'Imprimir'
                             ]
                     }
                 },
@@ -222,6 +236,7 @@ import { required, minLength } from "vuelidate/lib/validators"
                     obs: null,
                     producto_id: null,
                     cantidad: null,
+                    string_id: null
                 },
                 flag: false
             }
@@ -232,6 +247,9 @@ import { required, minLength } from "vuelidate/lib/validators"
                     required
                 },
                 cantidad: {
+                    required
+                },
+                string_id: {
                     required
                 },
             }
@@ -266,15 +284,15 @@ import { required, minLength } from "vuelidate/lib/validators"
             getInfo(){
                 const requestProduct = axios.get(router[1].get.listProductosInventario + this.token)
                 const requestRequisiciones = axios.get(router[1].get.cargarMisRequisiciones + this.token)
-                // const requestProv = axios.get(router[1].get.getProveedores + this.token)
+                const requestString = axios.get(router[1].get.getString + this.token)
                 // const requestSucursal = axios.get(router[1].get.getSucursal + this.token)
                 // const requestInventario = axios.get(router[1].get.getInventario + this.token)
                 
-                axios.all([requestProduct, requestRequisiciones])
-                .then(axios.spread((responseProducto, responseRequisiciones) => {
+                axios.all([requestProduct, requestRequisiciones,requestString])
+                .then(axios.spread((responseProducto, responseRequisiciones, responseString) => {
                     this.options.option_product = responseProducto.data
                     this.table.response.item  = responseRequisiciones.data
-                    // this.options.option_proveedor  = responseProv.data
+                    this.options.option_string  = responseString.data
                     // this.options.option_sucursal  = responseSucursal.data
                     // this.table.response.item  = responseInventario.data
 
@@ -337,9 +355,11 @@ import { required, minLength } from "vuelidate/lib/validators"
                 
             },
             handleSubmit(){
+                
                 axios.post(router[1].post.setRequisicion + this.token,{
                     obs: this.form.obs,
-                    data: this.table.pedido.items
+                    data: this.table.pedido.items,
+                    string_id: this.form.string_id
                 })
                 .then(response => {
                     if(response.status == 200){
@@ -379,17 +399,18 @@ import { required, minLength } from "vuelidate/lib/validators"
                 this.form.update = stock
 
             },
-            deleted(id){
-                axios.put(router[1].put.deleteStock + this.token,{
-                    id: id
-                })
+            imprimir(id, correlativo){
+                axios.post(router[1].post.pdf + this.token,{id: id}, { responseType: "blob" })
                 .then(response => {
                     if(response.status == 200){
-                        this.message_success('dato eliminado');
-                        this.$nextTick(() => {
-                            this.$bvModal.hide(this.modal.getter.id)
-                        })
-                        this.getInfo();
+                        var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+
+                        var fileLink = document.createElement("a");
+                        fileLink.href = fileURL;
+                        fileLink.setAttribute("download", correlativo + '.pdf');
+                        document.body.appendChild(fileLink);
+                        fileLink.click();
+                        this.message_success('Descargando documento');
                     }
                 })
                 .catch(error => {

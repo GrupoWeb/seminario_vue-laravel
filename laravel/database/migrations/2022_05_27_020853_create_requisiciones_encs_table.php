@@ -15,16 +15,17 @@ class CreateRequisicionesEncsTable extends Migration
     {
         Schema::create('requisiciones_encs', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('usuario_creo')->unsigned()->nullable();;
-            $table->date('fecha_creo')->nullable();;
-            $table->bigInteger('usuario_autorizo')->unsigned()->nullable();;
-            $table->date('fecha_autorizo')->nullable();;
-            $table->bigInteger('usuario_aprobo')->unsigned()->nullable();;
-            $table->date('fecha_aprobo')->nullable();;
-            $table->bigInteger('estado_requisicion')->unsigned()->nullable();;
-            $table->bigInteger('usuario_despacho')->unsigned()->nullable();;
-            $table->date('fecha_despacho')->nullable();;
-            $table->text('observaciones')->nullable();;
+            $table->bigInteger('usuario_creo')->unsigned()->nullable();
+            $table->date('fecha_creo')->nullable();
+            $table->bigInteger('usuario_autorizo')->unsigned()->nullable();
+            $table->date('fecha_autorizo')->nullable();
+            $table->bigInteger('usuario_aprobo')->unsigned()->nullable();
+            $table->date('fecha_aprobo')->nullable();
+            $table->bigInteger('estado_requisicion')->unsigned()->nullable();
+            $table->bigInteger('usuario_despacho')->unsigned()->nullable();
+            $table->date('fecha_despacho')->nullable();
+            $table->text('observaciones')->nullable();
+            $table->text('correlativo')->nullable();
             $table->timestamps();
 
             $table->softDeletes();

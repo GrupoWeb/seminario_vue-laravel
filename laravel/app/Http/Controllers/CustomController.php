@@ -1031,11 +1031,17 @@ class CustomController extends Controller
         try {
             DB::beginTransaction();
 
+            $correlativo = $this->generateCorrelativo($request->string_id);
+
+            $stringCorrelativo = $correlativo[0]['string'] . $correlativo[0]['numero'] . '-' .$correlativo[0]['year'];
+
+
             $req = RequisicionesEnc::create([
                 'usuario_creo'          =>  Auth::user()->id,
                 'fecha_creo'           =>  Carbon::now()->format("Y-m-d"),
                 'estado_requisicion'    =>  3,
-                'observaciones'         =>  $request->obs
+                'observaciones'         =>  $request->obs,
+                'correlativo'            =>  $stringCorrelativo
             ]);
 
             foreach ($request->data as $key => $value) {
@@ -1058,7 +1064,7 @@ class CustomController extends Controller
 
     public function cargarMisRequisiciones(){
         return response()->json(
-            RequisicionesEnc::selectRaw('requisiciones_encs.id as code, requisiciones_encs.observaciones as observacion, s.name as estado')
+            RequisicionesEnc::selectRaw('requisiciones_encs.id as code, requisiciones_encs.observaciones as observacion, s.name as estado, requisiciones_encs.correlativo')
             ->join('status as s','s.id','=','requisiciones_encs.estado_requisicion')
             ->where(['usuario_creo' =>  Auth::user()->id])->get()
             ,Response::HTTP_OK);
@@ -1197,5 +1203,53 @@ class CustomController extends Controller
             DB::rollBack();
             return response()->json(['error '. $th],Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+    
+    public function generateCorrelativo($string_id){
+        $correlativo = Correlativo::selectRaw('string_correlativo_id as string, numero, anio as year')->where(['empresa_id'   =>  Auth::user()->id, 'string_correlativo_id'   =>  $string_id])->get();
+        $numero = $correlativo[0]['numero']+1;
+
+        Correlativo::where(['empresa_id'   =>  Auth::user()->id, 'string_correlativo_id'   =>  $string_id])->update(['numero' =>  $numero]);
+
+        
+        return Correlativo::selectRaw('s.correlativo as string, correlativos.numero, correlativos.anio as year')
+        ->join('string_correlativos as s','s.id','=','correlativos.string_correlativo_id')->where(['empresa_id'   =>  Auth::user()->id, 'string_correlativo_id'   =>  $string_id])->get();
+        
+    }
+
+    public function pdfDespacho(Request $request){
+
+        $numero = RequisicionesEnc::selectRaw('requisiciones_encs.correlativo, users.fullname as name')
+        ->join('users','users.id','=','requisiciones_encs.usuario_creo')
+        ->where(['requisiciones_encs.id'    =>  $request->id])->get();
+        $correlativo = $numero[0]['correlativo'];
+        $usuario = $numero[0]['name'];
+
+
+        $dets = RequisicionesDet::selectRaw('p.nombre as producto, i.precio, requisiciones_dets.cantidad_solicitada as cantidad')
+            ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
+            ->join('productos as p','p.id','=','i.producto_id')
+            ->where(['requisiciones_encs_id'    =>  $request->id])
+            ->get();
+
+
+        $pdf = \PDF::loadView('reportes.despacho', compact('correlativo','usuario','dets'));
+        return  $pdf->stream('ejemplo.pdf');
+    }
+
+    public function getString(){
+        return response()->json(StringCorrelativo::selectRaw('id as value, correlativo as text')->get(), Response::HTTP_OK);
+    }
+
+    public function cargarItems(Request $request){
+
+        $id = RequisicionesEnc::select('id')->where(['correlativo'    => $request->correlativo])->get();
+        $dets = RequisicionesDet::selectRaw('p.nombre as producto, i.precio, requisiciones_dets.cantidad_solicitada as cantidad')
+            ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
+            ->join('productos as p','p.id','=','i.producto_id')
+            ->where(['requisiciones_encs_id'    =>  $id[0]['id']])
+            ->get();
+
+        return response()->json($dets, Response::HTTP_OK);
     }
 }

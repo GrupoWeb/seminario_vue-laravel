@@ -20,7 +20,7 @@ class RequisicionesEnc extends Model
      */
     protected $fillable = [
         'usuario_creo', 'fecha_creo', 'usuario_autorizo', 'fecha_autorizo', 'usuario_aprobo',
-        'fecha_aprobo', 'estado_requisicion','usuario_despacho','fecha_despacho', 'observaciones'
+        'fecha_aprobo', 'estado_requisicion','usuario_despacho','fecha_despacho', 'observaciones','correlativo'
     ];
 
     protected $dates = [

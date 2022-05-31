@@ -25,7 +25,9 @@ export const router = [
             cargarMisRequisiciones: 'api/cargarMisRequisiciones',
             cargarrequisicionesAprobar: 'api/cargarrequisicionesAprobar',
             cargarrequisicionesAutorizar: 'api/cargarrequisicionesAutorizar',
-            cargarrequisicionesDespacho: 'api/cargarrequisicionesDespacho'
+            cargarrequisicionesDespacho: 'api/cargarrequisicionesDespacho',
+            generateCorrelativo: 'api/generateCorrelativo',
+            getString: 'api/getString'
         },
         post: {
             departamentById: 'api/departamentoById',
@@ -66,7 +68,9 @@ export const router = [
             RequisicionesAprobarInfo: 'api/RequisicionesAprobarInfo',
             aprobarRequisicion: 'api/aprobarRequisicion',
             autorizarRequisicion: 'api/autorizarRequisicion',
-            despacharRequisicion: 'api/despacharRequisicion'
+            despacharRequisicion: 'api/despacharRequisicion',
+            pdf: 'api/pdf',
+            cargarItems: 'api/cargarItems'
         },
         
         put: {
