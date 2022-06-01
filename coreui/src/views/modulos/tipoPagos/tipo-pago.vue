@@ -74,7 +74,7 @@ import { router } from '../../../utils/router'
                         item: [],
                         fields: [
                             { key: 'value' , label: "Id" },
-                            { key: 'name' , label: "Descripción" },
+                            { key: 'text' , label: "Descripción" },
                             'editar',
                             'eliminar'
                             ]

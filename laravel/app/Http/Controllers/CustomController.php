@@ -27,6 +27,8 @@ use App\Models\Inventario;
 use App\Models\userHasRoles;
 use App\Models\RequisicionesEnc;
 use App\Models\RequisicionesDet;
+use App\Models\facturas;
+use App\Models\ventas;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -368,7 +370,7 @@ class CustomController extends Controller
     }
 
     public function getTipoPago(){
-        return response()->json(TipoPago::selectRaw('id as value, descripcion as name')->whereNull('deleted_at')->get(), Response::HTTP_OK);
+        return response()->json(TipoPago::selectRaw('id as value, descripcion as text')->whereNull('deleted_at')->get(), Response::HTTP_OK);
     }
 
     public function setTipoPago(Request $request){
@@ -1123,12 +1125,12 @@ class CustomController extends Controller
     }
     
 
-    public function despacharRequisicionOld(Request $request){
+    public function despacharRequisicionOld($id){
         try {
             DB::beginTransaction();
 
             $obj = RequisicionesDet::selectRaw('inventario_id as code, cantidad_solicitada as cantidad')
-                    ->where(['requisiciones_encs_id'    =>  $request->id])->get();
+                    ->where(['requisiciones_encs_id'    =>  $id])->get();
             
             foreach ($obj as $key => $value) {
                 $inv = Inventario::select('stock')->where(['id'    =>  $value->code])->get();
@@ -1136,12 +1138,12 @@ class CustomController extends Controller
                 Inventario::where(['id'    =>  $value->code])->update(['stock' =>  $objCantidad]);
             }
 
-            $aprobar = RequisicionesEnc::find($request->id);
-            if($aprobar){
-                $aprobar->update(['estado_requisicion'  =>  4, 'usuario_autorizo'   =>  Auth::user()->id, 'fecha_autorizo'  =>  Carbon::now()->format("Y-m-d")]);
-            }
+            // $aprobar = RequisicionesEnc::find($request->id);
+            // if($aprobar){
+            //     $aprobar->update(['estado_requisicion'  =>  4, 'usuario_autorizo'   =>  Auth::user()->id, 'fecha_autorizo'  =>  Carbon::now()->format("Y-m-d")]);
+            // }
             DB::commit();
-            return response()->json($aprobar,Response::HTTP_OK);
+            return response()->json($inv,Response::HTTP_OK);
         } catch (\Throwable $th) {
             throw $th;
             DB::rollBack();
@@ -1243,13 +1245,98 @@ class CustomController extends Controller
 
     public function cargarItems(Request $request){
 
-        $id = RequisicionesEnc::select('id')->where(['correlativo'    => $request->correlativo])->get();
-        $dets = RequisicionesDet::selectRaw('p.nombre as producto, i.precio, requisiciones_dets.cantidad_solicitada as cantidad')
-            ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
-            ->join('productos as p','p.id','=','i.producto_id')
-            ->where(['requisiciones_encs_id'    =>  $id[0]['id']])
-            ->get();
+        $flag = RequisicionesEnc::select('estado_requisicion')->where(['correlativo'    => $request->correlativo])->get();
 
-        return response()->json($dets, Response::HTTP_OK);
+        if($flag[0]['estado_requisicion'] == 7){
+            return response()->json(true, Response::HTTP_OK);
+        }else{
+            $id = RequisicionesEnc::select('id')->where(['correlativo'    => $request->correlativo])->get();
+            $dets = RequisicionesDet::selectRaw('p.nombre as producto, i.precio, requisiciones_dets.cantidad_solicitada as cantidad')
+                ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
+                ->join('productos as p','p.id','=','i.producto_id')
+                ->where(['requisiciones_encs_id'    =>  $id[0]['id']])
+                ->get();
+    
+            return response()->json($dets, Response::HTTP_OK);
+        }
+
+    }
+
+    public function setFactura(Request $request){
+        try {
+            DB::beginTransaction();
+
+            $flag = Clientes::where(['nit'   =>  $request->nit])->whereNull('deleted_at')->exists();
+
+            $despacho_id = RequisicionesEnc::select('id')->where(['correlativo'    => $request->correlativo])->get();
+
+
+            if(!$flag){
+                $cliente = Clientes::create([
+                    'nombre'        =>  $request->nombre,
+                    'nit'           =>  $request->nit,
+                    'direccion'     =>  $request->direccion,
+                    'telefono'      =>  $request->telefono,
+                    'email'         =>  $request->correo
+                ]);
+
+                $fac = facturas::create([
+                    'cliente_id'        =>      $cliente->id,
+                    'despacho_id'       =>      $despacho_id[0]['id'],
+                    'tipo_pagos_id'     =>      $request->tipo_id,
+                    'vendedor_id'       =>      Auth::user()->id,
+                    'fecha_creado'      =>      Carbon::now()->format("Y-m-d"),
+                    'monto_total'       =>      (double)$request->monto,
+                ]);
+
+                $venta = ventas::create([
+                    'factura_id'        =>  $fac->id,
+                    'fecha_creado'      =>  Carbon::now()->format("Y-m-d"),
+                    'monto_total'       =>  (double)$request->monto,
+                ]);
+
+                
+                $this->despacharRequisicionOld($despacho_id[0]['id']);
+
+                $estado = RequisicionesEnc::where(['correlativo'    => $request->correlativo])->update(['estado_requisicion'   =>   7]);
+
+                DB::commit();
+    
+                return response()->json($fac, Response::HTTP_OK);
+            }else{
+
+                $flag = Clientes::select('id')->where(['nit'   =>  $request->nit])->whereNull('deleted_at')->get();
+
+                $fac = facturas::create([
+                    'cliente_id'        =>      $flag[0]['id'] ,
+                    'despacho_id'       =>      $despacho_id[0]['id'],
+                    'tipo_pagos_id'     =>      $request->tipo_id,
+                    'vendedor_id'       =>      Auth::user()->id,
+                    'fecha_creado'      =>      Carbon::now()->format("Y-m-d"),
+                    'monto_total'       =>      (double)$request->monto,
+                ]);
+
+                $venta = ventas::create([
+                    'factura_id'        =>  $fac->id,
+                    'fecha_creado'      =>  Carbon::now()->format("Y-m-d"),
+                    'monto_total'       =>  (double)$request->monto,
+                ]);
+
+                $this->despacharRequisicionOld($despacho_id[0]['id']);
+
+                $estado = RequisicionesEnc::where(['correlativo'    => $request->correlativo])->update(['estado_requisicion'   =>   7]);
+
+                DB::commit();
+    
+                return response()->json($fac, Response::HTTP_OK);
+            }
+
+
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollBack();
+
+            return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

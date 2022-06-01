@@ -70,7 +70,8 @@ export const router = [
             autorizarRequisicion: 'api/autorizarRequisicion',
             despacharRequisicion: 'api/despacharRequisicion',
             pdf: 'api/pdf',
-            cargarItems: 'api/cargarItems'
+            cargarItems: 'api/cargarItems',
+            setFactura: 'api/setFactura'
         },
         
         put: {

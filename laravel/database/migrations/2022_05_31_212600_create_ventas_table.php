@@ -17,7 +17,7 @@ class CreateVentasTable extends Migration
             $table->id();
             $table->foreignId('factura_id')->constrained();
             $table->date('fecha_creado');
-            $table->decimal('monto_total',6);
+            $table->double('monto_total',8,2);
             $table->timestamps();
 
             $table->softDeletes();

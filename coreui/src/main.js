@@ -8,6 +8,7 @@ import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import VueSweetalert2 from 'vue-sweetalert2';
 import axios from 'axios';
+import VueCurrencyFilter from 'vue-currency-filter'
 
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -20,6 +21,14 @@ Vue.use(CoreuiVue)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueSweetalert2);
+Vue.use(VueCurrencyFilter, {
+    symbol: 'Q', // El símbolo, por ejemplo €
+    thousandsSeparator: ',', // Separador de miles
+    fractionCount: 2, // ¿Cuántos decimales mostrar?
+    fractionSeparator: '.', // Separador de decimales
+    symbolPosition: 'front', // Posición del símbolo. Puede ser al inicio ('front') o al final ('') es decir, si queremos que sea al final, en lugar de front ponemos una cadena vacía ''
+    symbolSpacing: true // Indica si debe poner un espacio entre el símbolo y la cantidad
+})
 
 
 new Vue({

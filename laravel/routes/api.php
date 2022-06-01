@@ -123,6 +123,7 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('generateCorrelativo','CustomController@generateCorrelativo');
     Route::get('getString','CustomController@getString');
     Route::post('cargarItems','CustomController@cargarItems');
+    Route::post('setFactura','CustomController@setFactura');
 
 
     /*********************************** */

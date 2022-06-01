@@ -20,7 +20,7 @@ class CreateFacturasTable extends Migration
             $table->foreignId('tipo_pagos_id')->constrained();
             $table->bigInteger('vendedor_id')->unsigned();
             $table->date('fecha_creado');
-            $table->decimal('monto_total',6);
+            $table->double('monto_total',8,2);
             $table->timestamps();
 
 

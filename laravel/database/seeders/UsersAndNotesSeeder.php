@@ -164,6 +164,10 @@ class UsersAndNotesSeeder extends Seeder
             'name' => 'Despachado',
             'class' => 'primary',
         ]);
+        DB::table('status')->insert([
+            'name' => 'Facturado',
+            'class' => 'primary',
+        ]);
 
 
 
