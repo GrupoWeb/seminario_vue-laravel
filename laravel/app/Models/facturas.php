@@ -19,7 +19,7 @@ class facturas extends Model
     * @var array
     */
    protected $fillable = [
-       'id', 'cliente_id', 'despacho_id','tipo_pagos_id','vendedor_id','fecha_creado','monto_total'
+       'id', 'cliente_id', 'despacho_id','tipo_pagos_id','vendedor_id','fecha_creado','monto_total','fel'
    ];
 
    protected $dates = [

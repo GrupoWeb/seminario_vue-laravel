@@ -31,6 +31,7 @@ use App\Models\facturas;
 use App\Models\ventas;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CustomController extends Controller
 {
@@ -1221,22 +1222,50 @@ class CustomController extends Controller
 
     public function pdfDespacho(Request $request){
 
-        $numero = RequisicionesEnc::selectRaw('requisiciones_encs.correlativo, users.fullname as name')
-        ->join('users','users.id','=','requisiciones_encs.usuario_creo')
-        ->where(['requisiciones_encs.id'    =>  $request->id])->get();
-        $correlativo = $numero[0]['correlativo'];
-        $usuario = $numero[0]['name'];
+        if($request->flag){
+            $numero = RequisicionesEnc::selectRaw('requisiciones_encs.correlativo, users.fullname as name')
+            ->join('users','users.id','=','requisiciones_encs.usuario_creo')
+            ->where(['requisiciones_encs.id'    =>  $request->id])->get();
+            $correlativo = $numero[0]['correlativo'];
+            $usuario = $numero[0]['name'];
+    
+    
+            $dets = RequisicionesDet::selectRaw('p.nombre as producto, i.precio, requisiciones_dets.cantidad_solicitada as cantidad')
+                ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
+                ->join('productos as p','p.id','=','i.producto_id')
+                ->where(['requisiciones_encs_id'    =>  $request->id])
+                ->get();
+    
+                $pdf = PDF::loadView('reportes.despacho', compact('correlativo','usuario','dets'));
+                return  $pdf->stream('ejemplo.pdf');
+                
+        }else{
+
+            $id = RequisicionesEnc::select('id')->where(['correlativo'  =>  $request->correlativo])->get();
+
+            $data = facturas::selectRaw('c.nombre as cliente, c.telefono as phone, c.email as correo, c.direccion as address, c.nit as nit, facturas.fel, date_format(facturas.created_at, "%d-%m-%Y") as fecha')->join('requisiciones_encs as r','r.id','=','facturas.despacho_id')
+            ->join('clientes as c','c.id','=','facturas.cliente_id')->where(['r.id'   =>  $id[0]['id']])->get();
+            
+            $monto = facturas::selectRaw('facturas.monto_total')->join('requisiciones_encs as r','r.id','=','facturas.despacho_id')
+            ->join('clientes as c','c.id','=','facturas.cliente_id')->where(['r.id'   =>  $id[0]['id']])->get();
+
+            $dets = RequisicionesDet::selectRaw('p.nombre as producto, i.precio, requisiciones_dets.cantidad_solicitada as cantidad')
+                ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
+                ->join('productos as p','p.id','=','i.producto_id')
+                ->where(['requisiciones_encs_id'    => $id[0]['id']])
+                ->get();
+
+            $logo = public_path('images/logo_uno.jpg');
+            $base = "data:image/png;base64," . base64_encode(file_get_contents($logo));
+
+            $fel = public_path('images/fel.png');
+            $logoFel = "data:image/png;base64," . base64_encode(file_get_contents($fel));
 
 
-        $dets = RequisicionesDet::selectRaw('p.nombre as producto, i.precio, requisiciones_dets.cantidad_solicitada as cantidad')
-            ->join('inventarios as i','i.id','=','requisiciones_dets.inventario_id')
-            ->join('productos as p','p.id','=','i.producto_id')
-            ->where(['requisiciones_encs_id'    =>  $request->id])
-            ->get();
+            $pdf = PDF::loadView('reportes.factura', compact('base', 'data', 'dets', 'monto', 'logoFel'));
+            return  $pdf->stream('ejemplo.pdf');
+        }
 
-
-        $pdf = \PDF::loadView('reportes.despacho', compact('correlativo','usuario','dets'));
-        return  $pdf->stream('ejemplo.pdf');
     }
 
     public function getString(){
@@ -1267,9 +1296,9 @@ class CustomController extends Controller
             DB::beginTransaction();
 
             $flag = Clientes::where(['nit'   =>  $request->nit])->whereNull('deleted_at')->exists();
-
+            
+            
             $despacho_id = RequisicionesEnc::select('id')->where(['correlativo'    => $request->correlativo])->get();
-
 
             if(!$flag){
                 $cliente = Clientes::create([
@@ -1280,6 +1309,10 @@ class CustomController extends Controller
                     'email'         =>  $request->correo
                 ]);
 
+                $correlativo = $this->generateCorrelativo(4);
+
+                $stringCorrelativo = $correlativo[0]['string'] . $correlativo[0]['numero'] . '-' .$correlativo[0]['year'];
+
                 $fac = facturas::create([
                     'cliente_id'        =>      $cliente->id,
                     'despacho_id'       =>      $despacho_id[0]['id'],
@@ -1287,6 +1320,7 @@ class CustomController extends Controller
                     'vendedor_id'       =>      Auth::user()->id,
                     'fecha_creado'      =>      Carbon::now()->format("Y-m-d"),
                     'monto_total'       =>      (double)$request->monto,
+                    'fel'               =>      $stringCorrelativo,
                 ]);
 
                 $venta = ventas::create([
@@ -1307,6 +1341,10 @@ class CustomController extends Controller
 
                 $flag = Clientes::select('id')->where(['nit'   =>  $request->nit])->whereNull('deleted_at')->get();
 
+                $correlativo = $this->generateCorrelativo(4);
+
+                $stringCorrelativo = $correlativo[0]['string'] . $correlativo[0]['numero'] . '-' .$correlativo[0]['year'];
+
                 $fac = facturas::create([
                     'cliente_id'        =>      $flag[0]['id'] ,
                     'despacho_id'       =>      $despacho_id[0]['id'],
@@ -1314,6 +1352,7 @@ class CustomController extends Controller
                     'vendedor_id'       =>      Auth::user()->id,
                     'fecha_creado'      =>      Carbon::now()->format("Y-m-d"),
                     'monto_total'       =>      (double)$request->monto,
+                    'fel'               =>      $stringCorrelativo,
                 ]);
 
                 $venta = ventas::create([

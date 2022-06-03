@@ -180,6 +180,9 @@ import { router } from '../../../utils/router'
                     this.form.address = response.data.value.direccion 
                     this.form.phone = response.data.value.telefono 
                     this.form.contact = response.data.value.correo 
+                }).catch(error => {
+                    this.skeleton = !this.skeleton
+                    this.button.loading = !this.button.loading
                 })
             },
             show(){
@@ -213,7 +216,7 @@ import { router } from '../../../utils/router'
                 this.handleSubmit()
             },
             checkFormValidity(){
-                console.log("valid ",this.$refs.form);
+                
                 const valid = this.$refs.form.checkValidity()
                 this.form.states.nitState = valid
                 this.form.states.nameState = valid

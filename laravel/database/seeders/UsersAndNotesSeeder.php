@@ -269,6 +269,7 @@ class UsersAndNotesSeeder extends Seeder
         StringCorrelativo::create(['correlativo' =>  'EMPRESA_1_']);
         StringCorrelativo::create(['correlativo' =>  'EMPRESA_2_']);
         StringCorrelativo::create(['correlativo' =>  'REQUISICION-EMP-']);
+        StringCorrelativo::create(['correlativo' =>  'FEL-EMP-']);
 
 
         Marca::create(['nombre' =>  'BMW']);

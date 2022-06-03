@@ -124,7 +124,7 @@ import { router } from '../../../utils/router'
                         fields: [
                             { key: 'value' , label: "Id" },
                             { key: 'nit' , label: "Nit" },
-                            { key: 'name' , label: "Descripción" },
+                            { key: 'text' , label: "Descripción" },
                             { key: 'address' , label: "Dirección" },
                             { key: 'contact' , label: "Contacto" },
                             'editar',
@@ -174,11 +174,15 @@ import { router } from '../../../utils/router'
                 this.button.loading = !this.button.loading
                 axios.get(router[1].get.sat + this.form.nit)
                 .then(response => {
+                        this.skeleton = !this.skeleton
+                        this.button.loading = !this.button.loading
+                        this.form.name = response.data.value.nombre 
+                        this.form.address = response.data.value.direccion 
+                        this.form.phone = response.data.value.telefono 
+                }).catch(error => {
                     this.skeleton = !this.skeleton
                     this.button.loading = !this.button.loading
-                    this.form.name = response.data.value.nombre 
-                    this.form.address = response.data.value.direccion 
-                    this.form.phone = response.data.value.telefono 
+                    console.log("Error ", error)
                 })
             },
             show(){
@@ -188,6 +192,7 @@ import { router } from '../../../utils/router'
             getTipos(){
                 axios.get(router[1].get.getProveedores + this.token)
                 .then(response => {
+                    console.log(response.data)
                     this.table.response.item = response.data
                 })
             },

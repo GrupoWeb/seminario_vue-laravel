@@ -21,6 +21,7 @@ class CreateFacturasTable extends Migration
             $table->bigInteger('vendedor_id')->unsigned();
             $table->date('fecha_creado');
             $table->double('monto_total',8,2);
+            $table->text('fel');
             $table->timestamps();
 
 

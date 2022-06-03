@@ -221,9 +221,13 @@ import { required, minLength } from "vuelidate/lib/validators"
                     if(response.status == 200){
                         this.message_success("Factura Realizada")
                         this.clearForm()
+                        this.mostrarFactura()
 
                     }
                 })
+            },
+            mostrarFactura(){
+                this.download_factura = !this.download_factura
             },
             consultaSat() {
                 if(this.form.nit === null){
@@ -275,6 +279,19 @@ import { required, minLength } from "vuelidate/lib/validators"
                         }
                     })
                 }
+            },
+            download(){
+                axios.post(router[1].post.pdf + this.token, {flag: false, correlativo: this.form.requi}, { responseType: "blob" })
+                .then(response => {
+
+                    var fileURL = window.URL.createObjectURL(new Blob([response.data]));
+                    var fileLink = document.createElement("a");
+                    fileLink.href = fileURL;
+                    fileLink.setAttribute("download", 'test.pdf');
+                    document.body.appendChild(fileLink);
+                    fileLink.click();
+                    // this.message_success('Descargando documento');
+                })
             }
         }
         

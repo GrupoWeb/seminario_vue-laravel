@@ -11,7 +11,7 @@
                         :noItemsView='{ noResults: "no se encontro ningun dato", noItems: "Sin datos para mostrar" }'>
                             <template #Imprimir="{item}">
                                 <td>
-                                   <CButton color="primary" @click="imprimir( item.code, item.correlativo )" v-if="item.estado === 'Despachado'">Imprimir</CButton>
+                                   <CButton color="primary" @click="imprimir( item.code, item.correlativo )" v-if="item.estado === 'Despachado' || item.estado === 'Facturado'">Imprimir</CButton>
                                 </td>
                             </template>
                     </CDataTable>
@@ -118,45 +118,6 @@
                         </b-button>
                     </template>
             </b-modal>
-
-            
-
-            <!-- <b-modal
-                size="sm"
-                @hidden="resetModal"
-                @ok="handleOkUpload"
-                v-model="modal.cargar.show"
-                :title="modal.cargar.title"
-                :id="modal.cargar.id"
-                :ref="modal.cargar.ref"
-                :header-bg-variant="modal.cargar.header.color"
-                :header-text-variant="modal.cargar.header.text"
-                :footer-bg-variant="modal.cargar.footer.color"
-                >
-
-                <b-form ref="formCarga" @submit.stop.prevent="handleSubmit">
-                    <CRow>
-                        <b-form-group
-                            id="stock"
-                            label="Stock:"
-                            label-for="stock"
-                            invalid-feedback="Ingrese un dato"
-                        >
-                            <b-form-input id="stock" type="number" v-model="form.stock" ></b-form-input>
-                        </b-form-group>
-                    </CRow>
-                </b-form>
-                    <template #modal-footer="{ ok, cancel}">
-                        <b-button size="sm" variant="danger" @click="cancel()">
-                            Cancelar
-                        </b-button>
-                        <b-button size="sm" variant="success" @click="ok()" :disabled="button.loading">
-                            <b-spinner small v-if="button.loading"></b-spinner>
-                            Guardar
-                        </b-button>
-                    </template>
-
-            </b-modal> -->
         </CCol>
     </CRow>
 </template>
@@ -400,7 +361,7 @@ import { required, minLength } from "vuelidate/lib/validators"
 
             },
             imprimir(id, correlativo){
-                axios.post(router[1].post.pdf + this.token,{id: id}, { responseType: "blob" })
+                axios.post(router[1].post.pdf + this.token,{id: id, flag: true}, { responseType: "blob" })
                 .then(response => {
                     if(response.status == 200){
                         var fileURL = window.URL.createObjectURL(new Blob([response.data]));
