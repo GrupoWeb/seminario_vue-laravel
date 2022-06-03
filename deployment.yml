@@ -58,7 +58,8 @@ spec:
     spec:
       containers:
         - name: umg-backend
-          image: jjolon/transport:v1
+          image: nginx
+          # image: jjolon/transport:v1
 #          image: jjolon/php-74:latest
           resources:
             requests:
@@ -102,22 +103,22 @@ spec:
     run: umg-backend
 
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nginx
-  namespace: umg
-  annotations:
-    kubernetes.digitalocean.com/load-balancer-id: "f171b208-0223-46c2-886c-f9656f59bbf7"
-    service.beta.kubernetes.io/do-loadbalancer-size-unit: "3"
-    service.beta.kubernetes.io/do-loadbalancer-disable-lets-encrypt-dns-records: "false"
-spec:
-  type: LoadBalancer
-  selector:
-    app:  umg-backend
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 80
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx
+#   namespace: umg
+#   annotations:
+#     kubernetes.digitalocean.com/load-balancer-id: "f171b208-0223-46c2-886c-f9656f59bbf7"
+#     service.beta.kubernetes.io/do-loadbalancer-size-unit: "3"
+#     service.beta.kubernetes.io/do-loadbalancer-disable-lets-encrypt-dns-records: "false"
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app:  umg-backend
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 80
+#       targetPort: 80
