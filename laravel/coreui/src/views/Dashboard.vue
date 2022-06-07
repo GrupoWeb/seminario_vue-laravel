@@ -1,6 +1,6 @@
 <template>
   <div>
-    <WidgetsDropdown/>
+    <!-- <WidgetsDropdown/> -->
     <CCard>
       <CCardBody>
         <CRow>
@@ -26,7 +26,7 @@
             </CButtonGroup>
           </CCol>
         </CRow>
-        <MainChartExample style="height:300px;margin-top:40px;"/>
+        <!-- <MainChartExample style="height:300px;margin-top:40px;"/> -->
       </CCardBody>
       <CCardFooter>
         <CRow class="text-center">
@@ -82,7 +82,11 @@
         </CRow>
       </CCardFooter>
     </CCard>
-    <WidgetsBrand/>
+
+
+
+    
+    <!-- <WidgetsBrand/> -->
     <CRow>
       <CCol md="12">
         <CCard>
