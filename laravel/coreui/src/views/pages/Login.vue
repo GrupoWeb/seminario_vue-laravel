@@ -35,6 +35,7 @@
                 </CRow>
               </CForm>
             </CCardBody>
+              <b-alert :show="showMessage" dismissible variant="danger" @dismissed="showMessage=0" @dismiss-count-down="countDownChanged">{{ message }}</b-alert>
           </CCard>
           <!-- <CCard
             color="primary"
@@ -68,12 +69,19 @@ import axios from "axios";
         return {
           email: '',
           password: '',
-          showMessage: false,
+          showMessage: 0,
           message: '',
+          dismissSecs: 5,
           
         }
       },
       methods: {
+        countDownChanged(showMessage) {
+          this.showMessage = showMessage
+        },
+        showAlert() {
+          this.showMessage = this.dismissSecs
+        },
         goRegister(){
           this.$router.push({ path: 'register' });
         },
@@ -83,16 +91,19 @@ import axios from "axios";
             email: self.email,
             password: self.password,
           }).then(function (response) {
+            
             self.email = '';
             self.password = '';
             localStorage.setItem("api_token", response.data.access_token);
             localStorage.setItem('roles', response.data.roles);
             self.$router.push({ path: 'dashboard' });
+          
           })
           .catch(function (error) {
-            self.message = 'Incorrect E-mail or password';
-            self.showMessage = true;
-            console.log(error);
+            self.message = 'Usuario o Contraseña Incorrecta!';
+            self.showAlert()
+            // self.showMessage = true;
+            
           });
   
         }

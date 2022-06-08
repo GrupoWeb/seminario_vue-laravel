@@ -15,6 +15,8 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'sweetalert2/dist/sweetalert2.min.css';
 
+import Mixin from "./mixins/index"
+
 Vue.prototype.$apiAdress = 'http://127.0.0.1:81'
 // Vue.prototype.$apiAdress = 'https://sgc.mineco.gob.gt'
 Vue.config.performance = true
@@ -34,6 +36,7 @@ Vue.use(VueCurrencyFilter, {
 
 new Vue({
   el: '#app',
+  mixins: [Mixin],
   router,
   store,  
   icons,
