@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -124,6 +125,10 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::get('getString','CustomController@getString');
     Route::post('cargarItems','CustomController@cargarItems');
     Route::post('setFactura','CustomController@setFactura');
+
+    Route::post('contactanos', 'MailController@sendContacto');
+    // Route::post('contactanos/{id}', 'MailController@send');
+    
 
 
     /*********************************** */

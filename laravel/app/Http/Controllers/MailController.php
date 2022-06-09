@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
 use Mail;
+use App\Mail\ContactanosMailables;
+// use Illuminate\Support\Facades\Mail;
 
 class MailController extends Controller
 {
@@ -115,5 +117,12 @@ class MailController extends Controller
             $message->setBody($template->content,'text/html');
         });
         return response()->json( ['status' => 'success'] );
+    }
+
+    public function sendContacto(Request $request){
+        $correo = new ContactanosMailables($request->nombre);
+        Mail::to($request->email)->send($correo);
+
+        return response()->json(['status' => 'success']);
     }
 }
