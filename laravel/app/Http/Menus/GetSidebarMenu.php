@@ -8,6 +8,8 @@ namespace App\Http\Menus;
 use App\MenuBuilder\MenuBuilder;
 use Illuminate\Support\Facades\DB;
 use App\Models\Menus;
+use App\Models\userHasRoles;
+use Illuminate\Support\Arr;
 use App\MenuBuilder\RenderFromDatabaseData;
 
 class GetSidebarMenu implements MenuInterface{
@@ -23,13 +25,24 @@ class GetSidebarMenu implements MenuInterface{
         $this->menu = Menus::join('menu_role', 'menus.id', '=', 'menu_role.menus_id')
             ->join('menulist', 'menulist.id', '=', 'menus.menu_id')
             ->select('menus.*')
+            ->distinct()
             ->where('menulist.name', '=', $menuName)
-            ->where('menu_role.role_name', '=', $role)
+            ->whereRaw('menu_role.role_name in ('. DB::raw("SELECT r.name FROM user_has_roles s INNER JOIN roles r 	ON r.id = s.role_id WHERE users_id = ". $role ."") . ')')
             ->orderBy('menus.sequence', 'asc')->get();       
     }
 
+    private function getMenuFromDBGuest($menuName, $role){
+        $this->menu = Menus::join('menu_role', 'menus.id', '=', 'menu_role.menus_id')
+        ->join('menulist', 'menulist.id', '=', 'menus.menu_id')
+        ->select('menus.*')
+        ->distinct()
+        ->where('menulist.name', '=', $menuName)
+        ->where('menu_role.role_name', '=', $role)
+        ->orderBy('menus.sequence', 'asc')->get();        
+    }
+
     private function getGuestMenu($menuName){
-        $this->getMenuFromDB($menuName, 'guest');
+        $this->getMenuFromDBGuest($menuName, 'guest');
     }
 
     private function getUserMenu($menuName){
@@ -42,25 +55,31 @@ class GetSidebarMenu implements MenuInterface{
 
     // roles prueba 2
 
-    public function getPruebaMenu($menuName){
-        $this->getMenuFromDB($menuName, 'empresa1');
+    public function getCustomMenu($menuName, $roles){
+        $this->getMenuFromDB($menuName, $roles);           
+        
     }
 
     /******************************* */
 
     public function get($roles, $menuName = 'sidebar menu'){
-        $roles = explode(',', $roles);
+        // $roles = explode(',', $roles);
         if(empty($roles)){
             $this->getGuestMenu($menuName);
-        }elseif(in_array('admin', $roles)){
-            $this->getAdminMenu($menuName);
-        }elseif(in_array('user', $roles)){
-            $this->getUserMenu($menuName);
-        }elseif(in_array('empresa1', $roles)){
-            $this->getPruebaMenu($menuName);
         }else{
-            $this->getGuestMenu($menuName);
+            $this->getCustomMenu($menuName, $roles);
         }
+        // if(empty($roles)){
+        //     $this->getGuestMenu($menuName);
+        // }elseif(in_array('admin', $roles)){
+        //     $this->getAdminMenu($menuName);
+        // }elseif(in_array('user', $roles)){
+        //     $this->getUserMenu($menuName);
+        // }elseif(in_array('empresa1', $roles)){
+        //     $this->getPruebaMenu($menuName);
+        // }else{
+        //     $this->getGuestMenu($menuName);
+        // }
         $rfd = new RenderFromDatabaseData;
         return $rfd->render($this->menu);
     }

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 use App\Models\User;
+use App\Models\userHasRoles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 
@@ -58,7 +60,8 @@ class AuthController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token, $request->email);
+        return $this->respondWithToken($token, $request->email, Auth::user()->id);
+        // return $this->respondWithToken($token, $request->email);
     }
 
     /**
@@ -90,15 +93,24 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token, $email)
+    protected function respondWithToken($token, $email, $id)
     {
-        $user = User::select('menuroles as roles')->where('email', '=', $email)->first();
+        $roles = "";
+        $data = userHasRoles::join('roles','roles.id','=','user_has_roles.role_id')->where(['users_id' =>  $id])->select('roles.name as roles')->get();
+
+        foreach($data as $key => $value){
+            if ($key == 0){
+                $roles .= $value->roles;
+            }else{
+                $roles .= ',' .$value->roles;
+            }
+        };
 
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
             'expires_in' => auth()->factory()->getTTL() * 60,
-            'roles' => $user->roles,
+            'roles'  =>  $roles
         ]);
     }
 }

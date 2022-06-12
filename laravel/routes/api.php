@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,11 +22,121 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('refresh', 'AuthController@refresh');
     Route::post('register', 'AuthController@register'); 
 
-    Route::resource('notes', 'NotesController');
+
+    // router custom
+    Route::get('getRoles','RolesController@getRoles');
+    Route::post('createUser','UsersController@createUser');
+
+    Route::get('departamentos','CustomController@getDepartamentos');
+    Route::post('departamentoById','CustomController@getDepartamentosById');
+    Route::post('updateDepartamenoById','CustomController@updateDepartament');
+    Route::post('deleteDepartament','CustomController@deleteDepartament');
+
+    Route::get('municipios','CustomController@getMunicipios');
+    Route::post('municipioById','CustomController@getMunicipiosById');
+    Route::post('updateMunicipioById','CustomController@updateMunicipio');
+    Route::post('deleteMunicipio','CustomController@deleteMunicipio');
+
+    Route::get('getSedes','CustomController@getSede');
+    Route::post('setSede', 'CustomController@setSede');
+    Route::post('getMunicipioByIdSede','CustomController@getMunicipioByIdSede');
+    Route::post('getSedeById','CustomController@getSedeById');
+    Route::post('updateSedeById','CustomController@updateSedeById');
+    Route::put('deleteSedeById', 'CustomController@deleteSedeById');
+
+    Route::get('getEmpresas','CustomController@getEmpresas');
+    Route::post('setEmpresa','CustomController@setEmpresa');
+    Route::post('getEmpresaById', 'CustomController@getEmpresaById');
+    Route::post('updateEmpresa','CustomController@updateEmpresa');
+    Route::put('deleteEmpresaById', 'CustomController@deleteEmpresaById');
+    Route::get('associateSedes','CustomController@associateSedes');
+    Route::get('associateEmpresas','CustomController@associateEmpresas');
+    Route::post('associateSedeEmpresa','CustomController@associateSedeEmpresa');
+    Route::post('getEmpresasAsociadas','CustomController@getEmpresasAsociadas');
+
+    Route::get('getTipoPago','CustomController@getTipoPago');
+    Route::post('setTipoPago','CustomController@setTipoPago');
+    Route::post('getTipoById','CustomController@getTipoById');
+    Route::put('updateTipoPagoById','CustomController@updateTipoPagoById');
+    Route::put('deleteTipoById','CustomController@deleteTipoById');
+    
+    Route::get('getTipoGasto','CustomController@getTipoGasto');
+    Route::post('setTipoGasto','CustomController@setTipoGasto');
+    Route::post('getTipoGastoById','CustomController@getTipoGastoById');
+    Route::put('deleteTipoGastoById','CustomController@deleteTipoGastoById');
+    Route::put('updateTipoGastoById','CustomController@updateTipoGastoById');
+
+    Route::get('getMedida','CustomController@getMedida');
+    Route::post('setMedida','CustomController@setMedida');
+    Route::post('getMedidaById','CustomController@getMedidaById');
+    Route::put('deleteMedidaById','CustomController@deleteMedidaById');
+    Route::put('updateMedidaById','CustomController@updateMedidaById');
+
+    Route::get('getStringCorrelativo','CustomController@getStringCorrelativo');
+    Route::post('setStringCorrelativo','CustomController@setStringCorrelativo');
+    Route::post('getStringCorrelativoById','CustomController@getStringCorrelativoById');
+    Route::put('deleteStringCorrelativoById','CustomController@deleteStringCorrelativoById');
+    Route::put('updateStringCorrelativoById','CustomController@updateStringCorrelativoById');
+
+    Route::post('setCorrelativoInitial', 'CustomController@setCorrelativoInitial');
+    Route::post('getData', 'CustomController@getData');
+    Route::post('setData', 'CustomController@setData');
+    Route::post('updateData', 'CustomController@updateData');
+    Route::post('getDataById', 'CustomController@getDataById');
+    Route::put('getUpdateDataById', 'CustomController@getUpdateDataById');
+    Route::put('getDeleteDataById', 'CustomController@getDeleteDataById');
+
+    Route::post('setProveedores','CustomController@setProveedores');
+    Route::get('getProveedores','CustomController@getProveedores');
+    Route::post('getProveedoresById','CustomController@getProveedoresById');
+    Route::put('updateProveedores','CustomController@updateProveedores');
+    Route::put('deleteProveedores','CustomController@deleteProveedores');
+
+    Route::get('getClientes','CustomController@getClientes');
+    Route::post('setClientes','CustomController@setClientes');
+    Route::post('getClienteById','CustomController@getClienteById');
+    Route::put('deleteClientes','CustomController@deleteClientes');
+
+    Route::get('getProductos','CustomController@getProductos');
+    Route::get('getMedidas','CustomController@getMedidas');
+    Route::get('getSucursal','CustomController@getSucursal');
+    Route::post('setInventario','CustomController@setInventario');
+
+    Route::get('getInventario','CustomController@getInventario');
+    Route::put('updateStock','CustomController@updateStock');
+    Route::put('deleteStock','CustomController@deleteStock');
+
+    Route::get('listProductosInventario','CustomController@listProductosInventario');
+    Route::post('findProducto','CustomController@findProducto');
+    Route::post('setRequisicion','CustomController@setRequisicion');
+    Route::get('cargarMisRequisiciones','CustomController@cargarMisRequisiciones');
+    Route::get('cargarrequisicionesAprobar','CustomController@cargarrequisicionesAprobar');
+    Route::post('RequisicionesAprobarInfo','CustomController@RequisicionesAprobarInfo');
+    Route::post('aprobarRequisicion','CustomController@aprobarRequisicion');
+    Route::put('rechazarRequisicion','CustomController@rechazarRequisicion');
+
+    Route::get('cargarrequisicionesAutorizar','CustomController@cargarrequisicionesAutorizar');
+    Route::get('cargarrequisicionesDespacho','CustomController@cargarrequisicionesDespacho');
+    Route::post('autorizarRequisicion','CustomController@autorizarRequisicion');
+    Route::post('despacharRequisicion','CustomController@despacharRequisicion');
+
+    Route::post('pdf','CustomController@pdfDespacho');
+    Route::get('generateCorrelativo','CustomController@generateCorrelativo');
+    Route::get('getString','CustomController@getString');
+    Route::post('cargarItems','CustomController@cargarItems');
+    Route::post('setFactura','CustomController@setFactura');
+
+    Route::post('contactanos', 'MailController@sendContacto');
+    // Route::post('contactanos/{id}', 'MailController@send');
+    
+
+
+    /*********************************** */
 
     Route::resource('resource/{table}/resource', 'ResourceController');
     
     Route::group(['middleware' => 'admin'], function ($router) {
+        Route::resource('users', 'UsersController')->except( ['create', 'store'] );
 
         Route::resource('mail',        'MailController');
         Route::get('prepareSend/{id}', 'MailController@prepareSend')->name('prepareSend');
@@ -33,7 +144,6 @@ Route::group(['middleware' => 'api'], function ($router) {
 
         Route::resource('bread',  'BreadController');   //create BREAD (resource)
 
-        Route::resource('users', 'UsersController')->except( ['create', 'store'] );
 
         Route::prefix('menu/menu')->group(function () { 
             Route::get('/',         'MenuEditController@index')->name('menu.menu.index');

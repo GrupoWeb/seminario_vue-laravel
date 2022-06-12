@@ -1,0 +1,124 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: umg-backend
+  namespace: umg
+# ---
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: umg-backend-pvc
+#   namespace: umg
+#   labels:
+#     name: umg-backend-pvc
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 20Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   hostPath:
+#     path: "d:/www/seminario/vue-laravel/laravel"
+
+
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: umg-backend-pvc
+#   namespace: umg
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 20Gi
+#   selector:
+#     matchLabels:
+#       name: umg-backend-pvc
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: umg-backend
+  namespace: umg
+  labels:
+    run: umg-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: umg-backend
+  template:
+    metadata:
+      labels:
+        run: umg-backend
+    spec:
+      containers:
+        - name: umg-backend
+          image: nginx
+          # image: jjolon/transport:v1
+#          image: jjolon/php-74:latest
+          resources:
+            requests:
+              memory: "Gi"
+              cpu: "200m"
+            limits:
+              memory: "3Gi"
+              cpu: "700m"
+          ports:
+            # - containerPort: 443
+            #   protocol: TCP
+            - containerPort: 80
+              protocol: TCP
+      #     volumeMounts:
+      #       - mountPath: "/var/www/html"
+      #         name: vol-documento
+      # volumes:
+      #   - name: vol-documento
+      #     persistentVolumeClaim:
+      #       claimName: umg-backend-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: umg-backend
+  namespace: umg
+  labels:
+    app.kubernetes.io/name: umg-backend
+    app.kubernetes.io/part-of: umg-backend
+spec:
+  type: LoadBalancer
+  # externalIPs:
+  # - 159.89.255.92
+  ports:
+    - name: http
+      port: 80
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    run: umg-backend
+
+
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx
+#   namespace: umg
+#   annotations:
+#     kubernetes.digitalocean.com/load-balancer-id: "f171b208-0223-46c2-886c-f9656f59bbf7"
+#     service.beta.kubernetes.io/do-loadbalancer-size-unit: "3"
+#     service.beta.kubernetes.io/do-loadbalancer-disable-lets-encrypt-dns-records: "false"
+# spec:
+#   type: LoadBalancer
+#   selector:
+#     app:  umg-backend
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 80
+#       targetPort: 80
