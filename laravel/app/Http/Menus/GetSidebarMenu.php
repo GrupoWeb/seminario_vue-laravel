@@ -31,8 +31,18 @@ class GetSidebarMenu implements MenuInterface{
             ->orderBy('menus.sequence', 'asc')->get();       
     }
 
+    private function getMenuFromDBGuest($menuName, $role){
+        $this->menu = Menus::join('menu_role', 'menus.id', '=', 'menu_role.menus_id')
+        ->join('menulist', 'menulist.id', '=', 'menus.menu_id')
+        ->select('menus.*')
+        ->distinct()
+        ->where('menulist.name', '=', $menuName)
+        ->where('menu_role.role_name', '=', $role)
+        ->orderBy('menus.sequence', 'asc')->get();        
+    }
+
     private function getGuestMenu($menuName){
-        $this->getMenuFromDB($menuName, 'guest');
+        $this->getMenuFromDBGuest($menuName, 'guest');
     }
 
     private function getUserMenu($menuName){

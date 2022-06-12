@@ -1,547 +1,279 @@
 <template>
   <div>
-    <WidgetsDropdown/>
-    <CCard>
-      <CCardBody>
-        <CRow>
-          <CCol sm="5">
-            <h4 id="traffic" class="card-title mb-0">Traffic</h4>
-            <div class="small text-muted">November 2017</div>
-          </CCol>
-          <CCol sm="7" class="d-none d-md-block">
-            <CButton color="primary" class="float-right">
-              <CIcon name="cil-cloud-download"/>
-            </CButton>
-            <CButtonGroup class="float-right mr-3">
-              <CButton
-                color="outline-secondary"
-                v-for="(value, key) in ['Day', 'Month', 'Year']"
-                :key="key"
-                class="mx-0"
-                :pressed="value === selected ? true : false"
-                @click="selected = value"
-              >
-                {{value}}
-              </CButton>
-            </CButtonGroup>
-          </CCol>
-        </CRow>
-        <MainChartExample style="height:300px;margin-top:40px;"/>
-      </CCardBody>
-      <CCardFooter>
-        <CRow class="text-center">
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Visits</div>
-            <strong>29.703 Users (40%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="success"
-              :value="40"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Unique</div>
-            <strong>24.093 Users (20%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="info"
-              :value="20"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Pageviews</div>
-            <strong>78.706 Views (60%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="warning"
-              :value="60"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">New Users</div>
-            <strong>22.123 Users (80%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              color="danger"
-              :value="80"
-            />
-          </CCol>
-          <CCol md sm="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Bounce Rate</div>
-            <strong>Average Rate (40.15%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              :value="40"
-            />
-          </CCol>
-        </CRow>
-      </CCardFooter>
-    </CCard>
-    <WidgetsBrand/>
     <CRow>
       <CCol md="12">
-        <CCard>
-          <CCardHeader>
-            Traffic &amp; Sales
-          </CCardHeader>
-          <CCardBody>
-            <CRow>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="6">
-                    <CCallout color="info">
-                      <small class="text-muted">New Clients</small><br>
-                      <strong class="h4">9,123</strong>
-                    </CCallout>
-                  </CCol>
-                  <CCol sm="6">
-                    <CCallout color="danger">
-                      <small class="text-muted">Recurring Clients</small><br>
-                      <strong class="h4">22,643</strong>
-                    </CCallout>
-                  </CCol>
-                </CRow>
-                <hr class="mt-0">
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Monday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      color="info"
-                      :value="34"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      color="danger"
-                      :value="78"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Tuesday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="56"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="94"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Wednesday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="12"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="67"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Thursday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="43"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="91"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Friday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="22"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="73"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Saturday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="53"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="82"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="progress-group mb-4">
-                  <div class="progress-group-prepend">
-                    <span class="progress-group-text">
-                      Sunday
-                    </span>
-                  </div>
-                  <div class="progress-group-bars">
-                    <CProgress
-                      class="progress-xs"
-                      :value="9"
-                      color="info"
-                    />
-                    <CProgress
-                      class="progress-xs"
-                      :value="69"
-                      color="danger"
-                    />
-                  </div>
-                </div>
-                <div class="legend text-center">
-                  <small>
-                    <sup><CBadge shape="pill" color="info">&nbsp;</CBadge></sup>
-                    New clients
-                    &nbsp;&nbsp;
-                    <sup><CBadge shape="pill" color="danger">&nbsp;</CBadge></sup>
-                    Recurring clients
-                  </small>
-                </div>
-              </CCol>
-              <CCol sm="12" lg="6">
-                <CRow>
-                  <CCol sm="6">
-                    <CCallout color="warning">
-                      <small class="text-muted">Pageviews</small><br>
-                      <strong class="h4">78,623</strong>
-                    </CCallout>
-                  </CCol>
-                  <CCol sm="6">
-                    <CCallout color="success">
-                      <small class="text-muted">Organic</small><br>
-                      <strong class="h4">49,123</strong>
-                    </CCallout>
-                  </CCol>
-                </CRow>
-                <hr class="mt-0">
-                <ul class="horizontal-bars type-2">
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon name="cil-user" class="progress-group-icon"/>
-                      <span class="title">Male</span>
-                      <span class="ml-auto font-weight-bold">43%</span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="43"
-                        color="warning"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group mb-5">
-                    <div class="progress-group-header">
-                      <CIcon name="cil-user-female" class="progress-group-icon"/>
-                      <span class="title">Female</span>
-                      <span class="ml-auto font-weight-bold">37%</span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="37"
-                        color="warning"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon name="cil-globe-alt" class="progress-group-icon"/>
-                      <span class="title">Organic Search</span>
-                      <span class="ml-auto font-weight-bold">
-                        191,235 <span class="text-muted small">(56%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="56"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon
-                        name="cib-facebook"
-                        height="17"
-                        class="progress-group-icon"
-                      />
-                      <span class="title">Facebook</span>
-                      <span class="ml-auto font-weight-bold">
-                        51,223 <span class="text-muted small">(15%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="15"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon
-                        name="cib-twitter"
-                        height="17"
-                        class="progress-group-icon"
-                      />
-                      <span class="title">Twitter</span>
-                      <span class="ml-auto font-weight-bold">
-                        37,564 <span class="text-muted small">(11%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="11"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="progress-group">
-                    <div class="progress-group-header">
-                      <CIcon
-                        name="cib-linkedin"
-                        height="17"
-                        class="progress-group-icon"
-                      />
-                      <span class="title">LinkedIn</span>
-                      <span class="ml-auto font-weight-bold">
-                        27,319 <span class="text-muted small">&nbsp;(8%)</span>
-                      </span>
-                    </div>
-                    <div class="progress-group-bars">
-                      <CProgress
-                        class="progress-xs"
-                        :value="8"
-                        color="success"
-                      />
-                    </div>
-                  </div>
-                  <div class="divider text-center">
-                    <CButton color="link" size="sm" class="text-muted">
-                      <CIcon name="cil-options"/>
-                    </CButton>
-                  </div>
-                </ul>
-              </CCol>
-            </CRow>
-            <br/>
-            <CDataTable
-              class="mb-0 table-outline"
-              hover
-              :items="tableItems"
-              :fields="tableFields"
-              head-color="light"
-              no-sorting
-            >
-              <td slot="avatar" class="text-center" slot-scope="{item}">
-                <div class="c-avatar">
-                  <img :src="item.avatar.url" class="c-avatar-img" alt="">
-                  <span
-                    class="c-avatar-status"
-                    :class="`bg-${item.avatar.status || 'secondary'}`"
-                  ></span>
-                </div>
-              </td>
-              <td slot="user" slot-scope="{item}">
-                <div>{{item.user.name}}</div>
-                <div class="small text-muted">
-                  <span>
-                    <template v-if="item.user.new">New</template>
-                    <template v-else>Recurring</template>
-                  </span> | Registered: {{item.user.registered}}
-                </div>
-              </td>
-              <td
-                slot="country"
-                slot-scope="{item}"
-                class="text-center"
-              >
-                <CIcon
-                  :name="item.country.flag"
-                  height="25"
-                />
-              </td>
-              <td slot="usage" slot-scope="{item}">
-                <div class="clearfix">
-                  <div class="float-left">
-                    <strong>{{item.usage.value}}%</strong>
-                  </div>
-                  <div class="float-right">
-                    <small class="text-muted">{{item.usage.period}}</small>
-                  </div>
-                </div>
-                <CProgress
-                  class="progress-xs"
-                  v-model="item.usage.value"
-                  :color="color(item.usage.value)"
-                />
-              </td>
-              <td
-                slot="payment"
-                slot-scope="{item}"
-                class="text-center"
-              >
-                <CIcon
-                  :name="item.payment.icon"
-                  height="25"
-                />
-              </td>
-              <td slot="activity" slot-scope="{item}">
-                <div class="small text-muted">Last login</div>
-                <strong>{{item.activity}}</strong>
-              </td>
-            </CDataTable>
-          </CCardBody>
-        </CCard>
+        <b-carousel
+          id="carousel-1"
+          v-model="slide"
+          :interval="4000"
+          controls
+          indicators
+          background="#ababab"
+          img-width="1024"
+          img-height="200"
+          style="text-shadow: 1px 1px 2px #333;"
+          @sliding-start="onSlideStart"
+          @sliding-end="onSlideEnd"
+        >
+          <!-- Text slides with image -->
+          <b-carousel-slide
+            caption="Servicio de transporte"
+            text="Más de 50 unidades para todo tipo de cargamento nacional o internacional."
+            :img-src="img.b1"
+            img-height="200"
+          ></b-carousel-slide>
+          <b-carousel-slide
+            caption="Servicio de construcción"
+            text="Somos una empresa innovadora, especializada en el suministro de personal calificado para la construcción"
+            :img-src="img.b2"
+            img-height="200"
+          ></b-carousel-slide>
+          <b-carousel-slide
+            caption="Maquinaría de Construcción"
+            text="Venta y Alquiler de todo tipo de maquinaria"
+            :img-src="img.b3"
+            img-height="200"
+          ></b-carousel-slide>
+          <b-carousel-slide
+            caption="Planta Minera"
+            text="Extracción de materia prima para la contrucción"
+            :img-src="img.b4"
+            img-height="200"
+          ></b-carousel-slide>
+          <b-carousel-slide
+            caption="Materiales de Construcción"
+            text="Amplio stock de materiales de la construcción."
+            :img-src="img.b5"
+            img-height="200"
+          ></b-carousel-slide>
+        </b-carousel>
       </CCol>
     </CRow>
+    <b-row>
+      <b-col fluid class="mt-5" >
+        <b-card-group deck>
+          <b-card
+              title="Perforaciones en Concreto"
+              :img-src="card.f1"
+              img-alt="Image"
+              img-top
+              tag="article"
+              style="max-width: 35rem;"
+              class="mb-2" 
+            >
+              <b-card-text>
+                Realizamos perforaciones circulares para paso de instalaciones en muros y losas de concreto de hasta 1.2 metros de profundidad. Nuestros procedimiento son limpios y seguros, garantizando un excelente trabajo.
+              </b-card-text>
+              <b-button href="#" variant="primary" v-b-modal.contacto>Cotizar</b-button>
+          </b-card>
+          <b-card
+              title="Demoliciones"
+              :img-src="card.f2"
+              img-alt="Image"
+              img-top
+              tag="article"
+              style="max-width: 35rem;"
+              class="mb-2" 
+            >
+              <b-card-text>
+                Demoliciones profesionales de todo tipo de estructuras incluyendo concreto y acero estructural. Nos enfocamos en la seguridad del personal y las zonas aledañas, desmontamos aquellos materiales que son re-utilizables, extraemos el material generado y limpiamos el área.
+              </b-card-text>
+              <b-button href="#" variant="primary" v-b-modal.contacto>Cotizar</b-button>
+          </b-card>
+          <b-card
+              title="Construcción"
+              :img-src="card.f3"
+              img-alt="Image"
+              img-top
+              tag="article"
+              style="max-width: 35rem;"
+              class="mb-2" 
+            >
+              <b-card-text>
+                Somos contratistas de obra civil y acabados. Nos encargamos de ejecutar los planos y especificaciones de su diseñador ajustándonos al requerimiento del cliente y a las condiciones específicas de cada obra, garantizando así un proyecto bien ejecutado.
+              </b-card-text>
+              <b-button href="#" variant="primary" v-b-modal.contacto>Cotizar</b-button>
+          </b-card>
+          <b-card
+              title="Transporte Terrestre"
+              :img-src="card.f4"
+              img-alt="Image"
+              img-top
+              tag="article"
+              style="max-width: 35rem;"
+              class="mb-2" 
+            >
+              <b-card-text>
+                Contamos con una amplia experiencia en el manejo de sus importaciones y exportaciones en la modalidad de carga completa (FTL) y consolidada (LTL).
+              </b-card-text>
+              <b-button href="#" variant="primary" v-b-modal.contacto>Cotizar</b-button>
+          </b-card>
+        </b-card-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col fluid="sm" class="mt-5">
+        <b-card title="Quienes Somos" class="mb-2">
+          <b-card-text>
+            
+              La empresa TransPort fue fundada en 1979 por Marcelino Moldes, la compañía dispone de 40,000 m2 de instalaciones logísticas estratégicamente ubicadas en la Ciudad de Guatemala. Contando con una amplia red de giros de negocio que sustenta las necesidades de los clientes en las principales ciudades y proyectos del mundo
+
+          </b-card-text>
+        </b-card>
+      </b-col>
+      <b-col fluid="sm" class="mt-5">
+        <b-card title="Misión" class="mb-2">
+          <b-card-text>
+            
+              Proporcionar Soluciones profesionales y personalizadas en el ámbito del Transporte, Construcción, Extracción y Elaboración de materiales para la construcción, envío a diferentes partes del territorio nacional y extranjero. Posicionándonos como la primera empresa nacional en cubrir las mayores necesidades de nuestros clientes
+
+          </b-card-text>
+        </b-card>
+      </b-col>
+      <b-col fluid="sm" class="mt-5">
+        <b-card title="Visión" class="mb-2">
+          <b-card-text>
+            
+              Afianzarnos como uno de los principales socios logísticos en la industria de la construcción y extracción de materiales de materia prima de la región. Aportando soluciones profesionales y personalizadas en el ámbito del transporte y la logística, con clara orientación al cliente, basada en la formación, motivación, compromiso e implementación de nuestro equipo humano
+
+          </b-card-text>
+        </b-card>
+      </b-col>
+    </b-row>
+
+    <b-modal id="contacto" ref="modal" title="Formulario de Contacto" @ok="handleOk" @show="resetModal"> 
+      <form ref="form" @submit.stop.prevent="handleSubmit" >
+        <b-form-group
+          label="Nombre"
+          label-for="nombre"
+          invalid-feedback="Nombre Requerido"
+          :state="form.states.nombre"
+        >
+          <b-form-input
+            id="nombre"
+            v-model="form.nombre"
+            :state="form.states.nombre"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Correo"
+          label-for="correo"
+          invalid-feedback="Email Requerido"
+          :state="form.states.correo"
+        >
+          <b-form-input
+            id="correo"
+            v-model="form.correo"
+            :state="form.states.correo"
+            required
+          ></b-form-input>
+        </b-form-group>
+        <b-form-group
+          label="Mensaje"
+          label-for="mensaje"
+          invalid-feedback="Mensaje Requerido"
+          :state="form.states.mensaje"
+        >
+          <b-form-textarea
+            id="mensaje"
+            v-model="form.mensaje"
+            :state="form.states.mensaje"
+            required
+            rows="3"
+            max-rows="6"
+          ></b-form-textarea>
+        </b-form-group>
+      </form>
+    </b-modal>
   </div>
 </template>
 
 <script>
-import MainChartExample from './charts/MainChartExample'
-import WidgetsDropdown from './widgets/WidgetsDropdown'
-import WidgetsBrand from './widgets/WidgetsBrand'
+import axios from 'axios'
+import { router } from '../utils/router'
 
 export default {
   name: 'Dashboard',
   components: {
-    MainChartExample,
-    WidgetsDropdown,
-    WidgetsBrand
   },
   data () {
     return {
-      selected: 'Month',
-      tableItems: [
-        {
-          avatar: { url: 'img/avatars/1.jpg', status: 'success' },
-          user: { name: 'Yiorgos Avraamu', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'USA', flag: 'cif-us' },
-          usage: { value: 50, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Mastercard', icon: 'cib-cc-mastercard' },
-          activity: '10 sec ago'
-        },
-        {
-          avatar: { url: 'img/avatars/2.jpg', status: 'danger' },
-          user: { name: 'Avram Tarasios', new: false, registered: 'Jan 1, 2015' },
-          country: { name: 'Brazil', flag: 'cif-br' },
-          usage: { value: 22, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Visa', icon: 'cib-cc-visa' },
-          activity: '5 minutes ago'
-        },
-        {
-          avatar: { url: 'img/avatars/3.jpg', status: 'warning' },
-          user: { name: 'Quintin Ed', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'India', flag: 'cif-in' },
-          usage: { value: 74, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Stripe', icon: 'cib-stripe' },
-          activity: '1 hour ago'
-        },
-        {
-          avatar: { url: 'img/avatars/4.jpg', status: '' },
-          user: { name: 'Enéas Kwadwo', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'France', flag: 'cif-fr' },
-          usage: { value: 98, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'PayPal', icon: 'cib-paypal' },
-          activity: 'Last month'
-        },
-        {
-          avatar: { url: 'img/avatars/5.jpg', status: 'success' },
-          user: { name: 'Agapetus Tadeáš', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'Spain', flag: 'cif-es' },
-          usage: { value: 22, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Google Wallet', icon: 'cib-google-pay' },
-          activity: 'Last week'
-        },
-        {
-          avatar: { url: 'img/avatars/6.jpg', status: 'danger' },
-          user: { name: 'Friderik Dávid', new: true, registered: 'Jan 1, 2015' },
-          country: { name: 'Poland', flag: 'cif-pl' },
-          usage: { value: 43, period: 'Jun 11, 2015 - Jul 10, 2015' },
-          payment: { name: 'Amex', icon: 'cib-cc-amex' },
-          activity: 'Last week'
+      slide: 0,
+      sliding: null,
+      img: {
+        b1: 'img/p1.jpg',
+        b2: 'img/p2.jpg',
+        b3: 'img/p3.jpg',
+        b4: 'img/p4.jpg',
+        b5: 'img/p5.jpg',
+      },
+      card: {
+        f1: 'img/card/perforacion.jpg',
+        f2: 'img/card/demolicion.jpg',
+        f3: 'img/card/construccion.jpg',
+        f4: 'img/card/trans.jpg',
+      },
+      form: {
+        nombre: null,
+        correo: null,
+        mensaje: null,
+        states: {
+          nombre: null,
+          correo: null,
+          mensaje: null
         }
-      ],
-      tableFields: [
-        { key: 'avatar', label: '', _classes: 'text-center' },
-        { key: 'user' },
-        { key: 'country', _classes: 'text-center' },
-        { key: 'usage' },
-        { key: 'payment', label: 'Payment method', _classes: 'text-center' },
-        { key: 'activity' },
-      ]
+      }
     }
   },
   methods: {
-    color (value) {
-      let $color
-      if (value <= 25) {
-        $color = 'info'
-      } else if (value > 25 && value <= 50) {
-        $color = 'success'
-      } else if (value > 50 && value <= 75) {
-        $color = 'warning'
-      } else if (value > 75 && value <= 100) {
-        $color = 'danger'
+    checkFormValidity() {
+        const valid = this.$refs.form.checkValidity()
+        this.form.states.nombre = valid
+        this.form.states.correo = valid
+        this.form.states.mensaje = valid
+        return valid
+      },
+    resetModal() {
+      this.form.nombre =  null
+      this.form.correo =  null
+      this.form.mensaje =  null
+      this.form.states.nombre =  null
+      this.form.states.correo =  null
+      this.form.states.mensaje =  null
+    },
+    handleOk(bvModalEvent){
+      bvModalEvent.preventDefault()
+      this.handleSubmit()
+    },
+    handleSubmit() {
+      if (!this.checkFormValidity()) {
+          return
+        }
+
+      axios.post(router[1].post.contactanos,{
+        email: this.form.correo,
+        nombre: this.form.nombre
+      })
+      .then(response => {
+        console.log(response)
+
+        if(response.status == 200){
+          this.$nextTick(() => {
+              this.$bvModal.hide('contacto')
+          })
+        }
+      })
+
+
+
+    },
+    onSlideStart(slide) {
+        this.sliding = true
+      },
+      onSlideEnd(slide) {
+        this.sliding = false
       }
-      return $color
-    }
   }
 }
 </script>

@@ -71,7 +71,8 @@ export const router = [
             despacharRequisicion: 'api/despacharRequisicion',
             pdf: 'api/pdf',
             cargarItems: 'api/cargarItems',
-            setFactura: 'api/setFactura'
+            setFactura: 'api/setFactura',
+            contactanos: 'api/contactanos'
         },
         
         put: {

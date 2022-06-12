@@ -33,6 +33,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Barryvdh\DomPDF\Facade\Pdf;
 
+
+
 class CustomController extends Controller
 {
     /**
@@ -1378,4 +1380,6 @@ class CustomController extends Controller
             return response()->json(['error ' . $th], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    
 }
