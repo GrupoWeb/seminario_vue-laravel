@@ -27,7 +27,8 @@ export const router = [
             cargarrequisicionesAutorizar: 'api/cargarrequisicionesAutorizar',
             cargarrequisicionesDespacho: 'api/cargarrequisicionesDespacho',
             generateCorrelativo: 'api/generateCorrelativo',
-            getString: 'api/getString'
+            getString: 'api/getString',
+            getEmpresasUser: 'api/getEmpresasUser'
         },
         post: {
             departamentById: 'api/departamentoById',

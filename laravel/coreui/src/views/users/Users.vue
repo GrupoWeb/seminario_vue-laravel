@@ -33,6 +33,16 @@
                 required
                 was-validated
               />
+              <CSelect
+                :value.sync ="form.empresa_id"
+                label="Empresa Asociada"
+                :options="propsModal.empresas"
+                placeholder="Seleccione ..."
+                valid-feedback="Correcto.."
+                invalid-feedback="Seleccione"
+                required
+                was-validated
+              />
               <CInput
                 v-model="form.name"
                 label="Nombre"
@@ -130,13 +140,15 @@ export default {
         color: "dark",
         size: "lg",
         BackDrop: false,
-        options: []
+        options: [],
+        empresas: []
       },
       form: {
         role:"",
         name: "",
         email: "",
-        password:""
+        password:"",
+        empresa_id: null
       }
     }
   },
@@ -170,7 +182,8 @@ export default {
           name: this.form.name,
           email: this.form.email,
           password: this.form.password,
-          role_id: this.form.role
+          role_id: this.form.role,
+          empresa_id: this.form.empresa_id
         }).then(response => {
           if(response.status == 200){
             this.$swal({
@@ -251,11 +264,23 @@ export default {
         self.$router.push({ path: '/login' });
       });
 
+    },
+    getEmpresas(){
+      let self = this;
+      axios.get(  this.$apiAdress + '/api/getEmpresasUser?token=' + localStorage.getItem("api_token"))
+      .then(function (response) {
+        self.propsModal.empresas = response.data
+      }).catch(function (error) {
+        console.log(error);
+        self.$router.push({ path: '/login' });
+      });
+
     }
   },
   mounted: function(){
     this.getUsers();
     this.getRoles();
+    this.getEmpresas()
   }
 }
 </script>

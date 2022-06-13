@@ -1381,5 +1381,11 @@ class CustomController extends Controller
         }
     }
 
+
+
+    public function getEmpresasUser(){
+        return response()->json(Empresa::selectRaw('id as value, nombre as label')->whereNull('deleted_at')->get(),Response::HTTP_OK);
+    }
+
     
 }

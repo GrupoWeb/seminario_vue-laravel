@@ -114,6 +114,7 @@ class UsersController extends Controller
             $user = User::create([
                 'name'              =>  $request->name,
                 'email'             =>  $request->email,
+                'fullName'             =>  $request->name,
                 'password'          =>  Hash::make($request->password),
                 'status_id'         =>  1
             ]);
@@ -124,8 +125,9 @@ class UsersController extends Controller
             $user->assignRole($roleName->name);
 
             userHasRoles::create([
-                'role_id'   =>  $request->role_id,
-                'users_id'  =>  $user->id
+                'role_id'       =>  $request->role_id,
+                'users_id'      =>  $user->id,
+                'empresa_id'    =>  $request->empresa_id
             ]);
 
             DB::commit();

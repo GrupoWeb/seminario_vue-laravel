@@ -127,6 +127,7 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::post('setFactura','CustomController@setFactura');
 
     Route::post('contactanos', 'MailController@sendContacto');
+    Route::get('getEmpresasUser', 'CustomController@getEmpresasUser');
     // Route::post('contactanos/{id}', 'MailController@send');
     
 
