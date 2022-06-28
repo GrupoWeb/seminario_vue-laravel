@@ -21,7 +21,6 @@ class CreateInventariosTable extends Migration
             $table->text('path_imagen');
             $table->decimal('precio',6);
             $table->integer('stock');
-            $table->foreignId('sede_empresa_id')->constrained();
             $table->timestamps();
 
             $table->softDeletes();

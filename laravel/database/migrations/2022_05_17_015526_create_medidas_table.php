@@ -16,10 +16,8 @@ class CreateMedidasTable extends Migration
         Schema::create('medidas', function (Blueprint $table) {
             $table->id();
             $table->text('nombre');
-            $table->bigInteger('status_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('status_id')->references('id')->on('status');
 
             $table->softDeletes();
         });
